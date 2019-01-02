@@ -10,6 +10,9 @@ set (GAMEFILES
 	src/GameProperties.hpp
 	src/StateGame.hpp
 	src/StateMenu.hpp
+	src/Coord.hpp
+	src/Cell.hpp
+	src/Board.hpp
 	)	
 
 #####################################################

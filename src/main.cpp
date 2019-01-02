@@ -3,7 +3,7 @@
 
 #include "StateMenu.hpp"
 
-
+#include "Board.hpp"
 
 int main()
 {
@@ -16,6 +16,11 @@ int main()
 
 	game->switchState(std::make_shared<StateMenu>());
 	sf::Clock clock;
+
+	Board b;
+	b.print();
+	b.fillBoard();
+	return 0;
 
 	while (window->isOpen())
 	{
