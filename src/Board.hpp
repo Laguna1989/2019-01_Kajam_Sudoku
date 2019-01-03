@@ -2,6 +2,7 @@
 #define GAME_BOARD_HPP_INCLUDEGUARD
 
 #include <string>
+#include <deque>
 #include <vector>
 #include <memory>
 #include <iostream>
@@ -50,24 +51,87 @@ public:
 		return ret;
 	}
 
-	void fillBoard ()
-	{
-		std::set<int> allValues = {1,2,3,4,5,6,7,8,9};
-		for (auto cell : m_cells) 
-		{
-			std::set<int> neighborValues = getNeighbourValues(cell->getPosition());
 
-			std::vector<int> options;
-			std::set_difference(allValues.begin(), allValues.end(),
-				neighborValues.begin(), neighborValues.end(),
-				std::inserter(options, options.begin())
-			);
-			if (options.empty()) break;
-			std::random_shuffle(options.begin(), options.end());
-			cell->setValue(options[0]);
+	void createPuzzle(int upTo = 80)
+	{
+		if (upTo > m_cells.size())
+		{
+			throw std::exception{};
+		}
+		fillBoard();
+		random_shuffle(m_cells.begin(), m_cells.end());
+		std::deque<std::shared_ptr<Cell>> cells;
+		for (int m = 0; m != upTo; ++m)
+		{
+			cells.push_back(m_cells.at(m));
 		}
 
-		print();
+		while (true)
+		{
+			auto value = cells.front()->getValue();
+			
+		}
+
+
+
+	}
+
+
+	void fillBoard ()
+	{
+		std::deque<std::shared_ptr<Cell>> cells;
+		for (auto c : m_cells)
+		{
+			cells.push_back(c);
+		}
+		doFillCell(cells, 0);
+	}
+
+
+	int doFillCell(std::deque<std::shared_ptr<Cell>> remainingCells, int value = 0)
+	{
+		static std::set<int> const allValues = { 1,2,3,4,5,6,7,8,9 };
+
+
+		auto cell = remainingCells.front();
+		remainingCells.pop_front();
+
+		std::set<int> neighborValues = getNeighbourValues(cell->getPosition());
+		std::vector<int> options;
+		std::set_difference(allValues.begin(), allValues.end(),
+			neighborValues.begin(), neighborValues.end(),
+			std::inserter(options, options.begin())
+		);
+		random_shuffle(options.begin(), options.end());
+
+		for (auto op : options)
+		{
+			cell->setValue(op);
+			
+			// all cells have been filled
+			if (remainingCells.empty())
+			{
+				value += 1;
+				
+
+				return value;
+			}
+				
+
+			// go down recursively
+			value = doFillCell(remainingCells, value);
+			if (value != 0)
+			{
+				if (value >= 2)
+					return 2;
+			}
+		}
+
+		// this lead to a dead end
+		// reset value and push it back to remaining cells
+		cell->setValue(0);
+		remainingCells.push_front(cell);
+		return value;
 	}
 
 	std::shared_ptr<Cell> getCellAt(Coord const& coord)
