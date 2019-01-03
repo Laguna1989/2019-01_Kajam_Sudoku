@@ -65,11 +65,23 @@ public:
 		{
 			cells.push_back(m_cells.at(m));
 		}
-
-		while (true)
+		
+		std::deque<std::shared_ptr<Cell>> toTest;
+		while (!cells.empty())
 		{
+			std::cout << toTest.size() << std::endl;
 			auto value = cells.front()->getValue();
-			
+			cells.front()->setValue(0);
+			toTest.push_front(cells.front());
+
+			if (doFillCell(toTest, 0) == 2)
+			{
+				std::cout << "not unique anymore!\n";
+				cells.front()->setValue(value);
+				toTest.pop_front();
+			}
+			cells.pop_front();
+
 		}
 
 
