@@ -39,6 +39,19 @@ public:
 			}
 	}
 
+	void getSolution(Board& b)
+	{
+		// copy values
+		for (int i = 0; i != 9; ++i)
+		for (int j = 0; j != 9; ++j)
+		{
+			auto num = getCellAt(Coord{ i,j })->getValue();
+			b.getCellAt(Coord{ i,j })->setValue(num);
+		}
+
+		b.fillBoard();
+	}
+
 	std::set<int> getNeighbourValues(Coord const& co)
 	{
 		std::set<int> ret;
@@ -54,7 +67,7 @@ public:
 	auto begin() { return m_cells.begin(); }
 	auto end() { return m_cells.end(); }
 
-	auto at(size_t idx) { return m_cells.at(idx); }
+	std::shared_ptr<Cell> at(size_t idx) { return m_cells.at(idx); }
 
 
 
@@ -73,6 +86,7 @@ public:
 		}
 		
 		std::deque<std::shared_ptr<Cell>> toTest;
+		std::vector<std::shared_ptr<Cell>> alreadyChecked;
 		while (!cells.empty())
 		{
 			std::cout << toTest.size() << std::endl;
@@ -86,8 +100,15 @@ public:
 				cells.front()->setValue(value);
 				toTest.pop_front();
 			}
+			else
+			{
+				alreadyChecked.push_back(cells.front());
+			}
 			cells.pop_front();
-
+			for (auto c : alreadyChecked)
+			{
+				c->setValue(0);
+			}
 		}
 
 
@@ -100,7 +121,8 @@ public:
 		std::deque<std::shared_ptr<Cell>> cells;
 		for (auto c : m_cells)
 		{
-			cells.push_back(c);
+			if(c->getValue() == 0)
+				cells.push_back(c);	
 		}
 		doFillCell(cells, 0);
 	}
@@ -110,9 +132,16 @@ public:
 	{
 		static std::set<int> const allValues = { 1,2,3,4,5,6,7,8,9 };
 
-
-		auto cell = remainingCells.front();
-		remainingCells.pop_front();
+		std::shared_ptr<Cell> cell{ nullptr };
+		while(true)
+		{
+			if (remainingCells.empty()) break;
+			cell = remainingCells.front();
+			remainingCells.pop_front();
+			if (cell->getValue() == 0)
+				break;
+		}
+		
 
 		std::set<int> neighborValues = getNeighbourValues(cell->getPosition());
 		std::vector<int> options;
@@ -124,17 +153,15 @@ public:
 
 		for (auto op : options)
 		{
-			cell->setValue(op);
+			if (cell != nullptr)
+				cell->setValue(op);
 			
 			// all cells have been filled
 			if (remainingCells.empty())
 			{
 				value += 1;
-				
-
 				return value;
 			}
-				
 
 			// go down recursively
 			value = doFillCell(remainingCells, value);

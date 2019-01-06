@@ -13,7 +13,9 @@ public:
 	Cell(int i, int j) : m_pos{ Coord{i,j} }
 	{
 	}
+	
 	Coord const getPosition() const { return m_pos; }
+	void setPosition(Coord c) { m_pos = c; }
 
 	void setValue(unsigned int v) { m_value = v; }
 	unsigned int const getValue() const { return m_value; }
