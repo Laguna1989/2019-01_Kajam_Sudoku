@@ -86,7 +86,6 @@ public:
 		}
 		
 		std::deque<std::shared_ptr<Cell>> toTest;
-		std::vector<std::shared_ptr<Cell>> alreadyChecked;
 		while (!cells.empty())
 		{
 			std::cout << toTest.size() << std::endl;
@@ -102,13 +101,10 @@ public:
 			}
 			else
 			{
-				alreadyChecked.push_back(cells.front());
+				cells.front()->setValue(0);
+				toTest.pop_front();
 			}
 			cells.pop_front();
-			for (auto c : alreadyChecked)
-			{
-				c->setValue(0);
-			}
 		}
 
 
@@ -168,7 +164,9 @@ public:
 			if (value != 0)
 			{
 				if (value >= 2)
-					return 2;
+					value = 2;
+
+				return value;
 			}
 		}
 
