@@ -13,6 +13,7 @@ set (GAMEFILES
 	src/Coord.hpp
 	src/Cell.hpp
 	src/Board.hpp
+	src/GameBoard.hpp
 	)	
 
 #####################################################

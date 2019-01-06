@@ -51,6 +51,12 @@ public:
 		return ret;
 	}
 
+	auto begin() { return m_cells.begin(); }
+	auto end() { return m_cells.end(); }
+
+	auto at(size_t idx) { return m_cells.at(idx); }
+
+
 
 	void createPuzzle(int upTo = 80)
 	{
@@ -195,4 +201,16 @@ public:
 		std::cout << std::endl;
 	}
 };
+
+auto begin(Board& obj)
+{
+	return obj.begin();
+}
+
+auto end(Board& obj)
+{
+	return obj.end();
+}
+
+
 #endif

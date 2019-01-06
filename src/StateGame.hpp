@@ -11,8 +11,9 @@
 #include "JamTemplate/SmartSprite.hpp"
 #include "JamTemplate/SmartShape.hpp"
 #include "JamTemplate/TweenAlpha.hpp"
-#include "Hud.hpp"
 
+#include "Hud.hpp"
+#include "GameBoard.hpp"
 
 class StateGame : public JamTemplate::GameState {
 public:
@@ -24,6 +25,8 @@ private:
 	std::shared_ptr<Hud> m_hud;
 
 	JamTemplate::SmartShape::Sptr m_overlay;
+
+	GameBoard::Sptr m_board;
 
 	void doInternalUpdate (float const elapsed) override
 	{
@@ -46,12 +49,11 @@ private:
 		m_overlay->update(0);
 		auto tw = TweenAlpha<SmartShape>::create(m_overlay, 0.5f, sf::Uint8{ 255 }, sf::Uint8{ 0 });
 		add(tw);
+
+		m_board = std::make_shared<GameBoard>();
+		add(m_board);
 	}
 
-	void doInternalDraw() const override
-	{
-
-	}
 };
 
 #endif

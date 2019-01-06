@@ -7,19 +7,12 @@
 
 int main()
 {
-
-	Board b{};
-	//b.print();
-	//b.fillBoard();
-	b.createPuzzle(10);
-	b.print();
-
-	return 0;
-
-
+	/*Board b{};
+	b.createPuzzle(15);
+	b.print();*/
 
 	JamTemplate::Game::Sptr game = std::make_shared<JamTemplate::Game>();
-	game->setUp(800, 600, 4, "SFML works!");
+	game->setUp(1200, 700, 2, "VsSudoku");
 
 	auto window = game->getRenderWindow();
 	auto renderTexture = game->getRenderTarget();
