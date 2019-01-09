@@ -1,11 +1,12 @@
-#ifndef GAME_BOARD_HPP_INCLUDEGUARD
-#define GAME_BOARD_HPP_INCLUDEGUARD
+#ifndef GAME_SUDOKUBOARD_HPP_INCLUDEGUARD
+#define GAME_SUDOKUBOARD_HPP_INCLUDEGUARD
 
 #include <string>
 #include <deque>
 #include <vector>
 #include <memory>
 #include <iostream>
+
 #include "Cell.hpp"
 
 class Board {
@@ -244,16 +245,6 @@ public:
 		std::cout << std::endl;
 	}
 };
-
-auto begin(Board& obj)
-{
-	return obj.begin();
-}
-
-auto end(Board& obj)
-{
-	return obj.end();
-}
 
 
 #endif

@@ -1,5 +1,5 @@
 //#include "GameBoard.hpp"
-//#include "StateGame.hpp"
+#include "StateGame.hpp"
 
 //void GameBoard::moveCursorTo(int nextX, int nextY)
 //{

@@ -3,13 +3,8 @@
 
 #include "StateMenu.hpp"
 
-#include "Board.hpp"
-
 int main()
 {
-	/*Board b{};
-	b.createPuzzle(15);
-	b.print();*/
 
 	JamTemplate::Game::Sptr game = std::make_shared<JamTemplate::Game>();
 	game->setUp(1200, 700, 2, "VsSudoku");

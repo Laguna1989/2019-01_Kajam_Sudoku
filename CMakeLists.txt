@@ -9,6 +9,7 @@ set (GAMEFILES
 	src/main.cpp
 	src/GameProperties.hpp
 	src/StateGame.hpp
+	src/StateGame.cpp
 	src/StateMenu.hpp
 	src/Coord.hpp
 	src/Cell.hpp

@@ -1,5 +1,5 @@
-#ifndef GAME_BOARD_GUARD_HPP 
-#define  GAME_BOARD_GUARD_HPP
+#ifndef GAME_GAME_BOARD_GUARD_HPP 
+#define GAME_GAME_BOARD_GUARD_HPP
 
 #include <memory>
 #include <string>

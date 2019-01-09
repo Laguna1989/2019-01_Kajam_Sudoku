@@ -3,62 +3,37 @@
 
 #include <iostream>
 #include <vector>
+#include <memory>
 
 #include "JamTemplate/GameState.hpp"
-#include "JamTemplate/Timer.hpp"
-#include "JamTemplate/Collision.hpp"
-#include "JamTemplate/ObjectGroup.hpp"
-#include "JamTemplate/SmartSprite.hpp"
-#include "JamTemplate/SmartShape.hpp"
-#include "JamTemplate/TweenAlpha.hpp"
+
 
 #include "Hud.hpp"
 #include "GameBoard.hpp"
+
+namespace JamTemplate
+{
+	class SmartShape;
+	class GameBoard;
+}
+
 
 class StateGame : public JamTemplate::GameState {
 public:
 	StateGame() = default;
 
-
 private:
 
 	std::shared_ptr<Hud> m_hud;
 
-	JamTemplate::SmartShape::Sptr m_overlay;
+	std::shared_ptr<JamTemplate::SmartShape> m_overlay;
 
-	GameBoard::Sptr m_boardP1;
-	GameBoard::Sptr m_boardP2;
+	std::shared_ptr <GameBoard> m_boardP1;
+	std::shared_ptr<GameBoard> m_boardP2;
 
-	void doInternalUpdate (float const elapsed) override
-	{
-		m_overlay->update(elapsed);
-		
-	}
+	void doInternalUpdate(float const elapsed) override;
 
-	void doCreate() override
-	{
-		float w = static_cast<float>(getGame()->getRenderTarget()->getSize().x);
-		float h = static_cast<float>(getGame()->getRenderTarget()->getSize().y);
-		m_hud = std::make_shared<Hud>();
-		add(m_hud);
-
-		using JamTemplate::TweenAlpha;
-		using JamTemplate::SmartShape;
-
-		m_overlay = std::make_shared<SmartShape>();
-		m_overlay->makeRect(sf::Vector2f{ w,h });
-		m_overlay->setColor(sf::Color{ 0,0,0 });
-		m_overlay->update(0);
-		auto tw = TweenAlpha<SmartShape>::create(m_overlay, 0.5f, sf::Uint8{ 255 }, sf::Uint8{ 0 });
-		add(tw);
-
-		m_boardP1 = std::make_shared<GameBoard>();
-		add(m_boardP1);
-
-		m_boardP2 = std::make_shared<GameBoard>();
-		m_boardP2->setFirstPlayer(true);
-		add(m_boardP2);
-	}
+	void doCreate() override;
 
 };
 
