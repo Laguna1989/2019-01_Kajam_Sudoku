@@ -14,6 +14,7 @@ set (GAMEFILES
 	src/Cell.hpp
 	src/Board.hpp
 	src/GameBoard.hpp
+	src/GameBoard.cpp
 	)	
 
 #####################################################

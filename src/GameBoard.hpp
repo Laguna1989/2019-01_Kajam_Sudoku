@@ -48,8 +48,20 @@ private:
 		
 		updateSelector(elapsed);
 		updateNumbers(elapsed);
+
+		checkForNextBoard();
 	};
 
+	void checkForNextBoard()
+	{
+		if (m_board.getOpenFields() == 0)
+		{
+			m_board.clearBoard();
+			m_boardFull.clearBoard();
+			m_board.createPuzzle(5);
+			m_board.getSolution(m_boardFull);
+		}
+	}
 
 	void updateNumbers(float elapsed)
 	{
@@ -185,6 +197,7 @@ private:
 		m_selectorX = nextX;
 		m_selectorY = nextY;
 		m_selector->setPosition(positionFromCoord(nextX, nextY));
+
 	}
 
 	virtual void doDraw() const override 
