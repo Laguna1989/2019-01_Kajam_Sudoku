@@ -52,6 +52,17 @@ public:
 		b.fillBoard();
 	}
 
+	int getOpenFields()
+	{
+		int sum = 0;
+		for (auto c : m_cells)
+		{
+			if (c->getValue() == 0)
+				sum++;
+		}
+		return sum;
+	}
+
 	std::set<int> getNeighbourValues(Coord const& co)
 	{
 		std::set<int> ret;
@@ -106,11 +117,17 @@ public:
 			}
 			cells.pop_front();
 		}
-
-
-
 	}
 
+	void clearBoard()
+	{
+		for (auto c : m_cells)
+		{
+			c->setValue(0);
+		}
+
+		std::sort(m_cells.begin(), m_cells.end(), [](auto c1, auto c2) { return c1->getPosition() < c2->getPosition(); });
+	}
 
 	void fillBoard ()
 	{
@@ -161,6 +178,7 @@ public:
 
 			// go down recursively
 			value = doFillCell(remainingCells, value);
+			std::cout << remainingCells.size() << " " << value << "\n";
 			if (value != 0)
 			{
 				if (value >= 2)

@@ -26,11 +26,13 @@ private:
 
 	JamTemplate::SmartShape::Sptr m_overlay;
 
-	GameBoard::Sptr m_board;
+	GameBoard::Sptr m_boardP1;
+	GameBoard::Sptr m_boardP2;
 
 	void doInternalUpdate (float const elapsed) override
 	{
 		m_overlay->update(elapsed);
+		
 	}
 
 	void doCreate() override
@@ -50,8 +52,12 @@ private:
 		auto tw = TweenAlpha<SmartShape>::create(m_overlay, 0.5f, sf::Uint8{ 255 }, sf::Uint8{ 0 });
 		add(tw);
 
-		m_board = std::make_shared<GameBoard>();
-		add(m_board);
+		m_boardP1 = std::make_shared<GameBoard>();
+		add(m_boardP1);
+
+		m_boardP2 = std::make_shared<GameBoard>();
+		m_boardP2->setFirstPlayer(true);
+		add(m_boardP2);
 	}
 
 };
