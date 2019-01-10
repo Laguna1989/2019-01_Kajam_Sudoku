@@ -5,16 +5,25 @@
 #include <string>
 
 #include "JamTemplate/GameObject.hpp"
-#include "JamTemplate/SmartText.hpp"
-#include "JamTemplate/SmartShape.hpp"
 
 #include "Board.hpp"
 #include "GameProperties.hpp"
 #include "JamTemplate/InputManager.hpp"
 
+namespace JamTemplate
+{
+	class SmartText;
+	class SmartShape;
+}
+
+class StateGame;
+
 class GameBoard : public JamTemplate::GameObject
 {
 public:
+
+	GameBoard(StateGame& sg);
+
 	using Sptr = std::shared_ptr<GameBoard>;
 
 	void setFirstPlayer(bool isFirstPlayer)
@@ -26,9 +35,10 @@ private:
 	mutable Board m_board;
 	Board m_boardFull;
 
-	mutable JamTemplate::SmartText m_text;
+	mutable std::shared_ptr<JamTemplate::SmartText> m_text;
+	std::shared_ptr<JamTemplate::SmartShape> m_selector;
 
-	JamTemplate::SmartShape::Sptr m_selector;
+	StateGame& m_stateGame;
 	
 	int m_selectorX{ 0 };
 	int m_selectorY{ 0 };
@@ -42,15 +52,7 @@ private:
 					GP::CellPositionOffsetY() + y * GP::CellPositionSpacing() } +sf::Vector2f{ (m_firstPlayer ? 0.0f : 10.0f* GP::CellPositionSpacing()), 0 };
 	}
 
-	virtual void doUpdate(float const elapsed) override
-	{
-		m_text.update(elapsed);
-		
-		updateSelector(elapsed);
-		updateNumbers(elapsed);
-
-		checkForNextBoard();
-	}
+	virtual void doUpdate(float const elapsed) override;
 
 	void checkForNextBoard();
 

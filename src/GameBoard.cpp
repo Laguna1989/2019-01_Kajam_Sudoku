@@ -1,18 +1,15 @@
 #include "GameBoard.hpp"
 #include "StateGame.hpp"
+
 #include "JamTemplate/Game.hpp"
+#include "JamTemplate/SmartText.hpp"
+#include "JamTemplate/SmartShape.hpp"
+#include "JamTemplate/TweenPosition.hpp"
 
-//void GameBoard::moveCursorTo(int nextX, int nextY)
-//{
-//	m_selectorX = nextX;
-//	m_selectorY = nextY;
-//
-//	auto start = m_selector->getPosition();
-//	auto end = positionFromCoord(m_selectorX, m_selectorY);
-//	auto tw = JamTemplate::TweenPosition<JamTemplate::SmartShape>::create(m_selector, 0.5, start, end);
-//	m_stateGame.add(tw);
-//}
+GameBoard::GameBoard(StateGame& sg) : m_stateGame(sg)
+{
 
+}
 
 void GameBoard::checkForNextBoard()
 {
@@ -23,6 +20,16 @@ void GameBoard::checkForNextBoard()
 		m_board.createPuzzle(5);
 		m_board.getSolution(m_boardFull);
 	}
+}
+
+void GameBoard::doUpdate(float const elapsed) 
+{
+	m_text->update(elapsed);
+
+	updateSelector(elapsed);
+	updateNumbers(elapsed);
+
+	checkForNextBoard();
 }
 
 void GameBoard::updateNumbers(float elapsed)
@@ -100,6 +107,7 @@ void GameBoard::placeWrongValue()
 
 void GameBoard::updateSelector(float elapsed)
 {
+	
 	//std::cout << m_selectorX << " " << m_selectorY << "\n";
 	int nextX = m_selectorX;
 	int nextY = m_selectorY;
@@ -146,7 +154,7 @@ void GameBoard::updateSelector(float elapsed)
 
 	if (moved)
 	{
-		std::cout << "move to " << nextX << " " << nextY << " from " << m_selectorX << " " << m_selectorY << std::endl;
+		//std::cout << "move to " << nextX << " " << nextY << " from " << m_selectorX << " " << m_selectorY << std::endl;
 		moveCursorTo(nextX, nextY);
 	}
 
@@ -158,7 +166,13 @@ void GameBoard::moveCursorTo(int nextX, int nextY)
 {
 	m_selectorX = nextX;
 	m_selectorY = nextY;
-	m_selector->setPosition(positionFromCoord(nextX, nextY));
+
+	auto start = m_selector->getPosition();
+	auto end = positionFromCoord(m_selectorX, m_selectorY);
+
+	auto tw = JamTemplate::TweenPosition<JamTemplate::SmartShape>::create(m_selector, 0.125, start, end);
+	m_stateGame.add(tw);
+
 
 }
 
@@ -169,11 +183,11 @@ void GameBoard::doDraw() const
 	{
 		if (c->getValue() != 0)
 		{
-			m_text.setPosition(positionFromCoord(c->getPosition().x, c->getPosition().y));
-			m_text.setText(std::to_string(c->getValue()));
-			m_text.update(0.0f);
-			m_text.setCharacterSize(16U);
-			m_text.draw(getGame()->getRenderTarget());
+			m_text->setPosition(positionFromCoord(c->getPosition().x, c->getPosition().y) + sf::Vector2f{11,6});
+			m_text->setText(std::to_string(c->getValue()));
+			m_text->update(0.0f);
+			m_text->setCharacterSize(16U);
+			m_text->draw(getGame()->getRenderTarget());
 		}
 	}
 };
@@ -184,7 +198,8 @@ void GameBoard::doDraw() const
 
 	m_board.getSolution(m_boardFull);
 
-	m_text.loadFont("assets/font.ttf");
+	m_text = std::make_shared<JamTemplate::SmartText>();
+	m_text->loadFont("assets/font.ttf");
 
 	m_selector = std::make_shared<JamTemplate::SmartShape>();
 	m_selector->makeRect(sf::Vector2f{ GP::CellPositionSpacing() , GP::CellPositionSpacing() });

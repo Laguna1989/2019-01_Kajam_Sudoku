@@ -57,7 +57,7 @@ namespace JamTemplate {
 		{
 			cleanUpObjects();
 			addNewObjects();
-
+			
 			for (auto& go : m_objects)
 			{
 				go->update(elapsed);

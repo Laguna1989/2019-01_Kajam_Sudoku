@@ -7,6 +7,7 @@
 void StateGame::doInternalUpdate (float const elapsed) 
 {
 	m_overlay->update(elapsed);
+	
 }
 
 void StateGame::doCreate() 
@@ -26,10 +27,10 @@ void StateGame::doCreate()
 	auto tw = TweenAlpha<SmartShape>::create(m_overlay, 0.5f, sf::Uint8{ 255 }, sf::Uint8{ 0 });
 	add(tw);
 
-	m_boardP1 = std::make_shared<GameBoard>();
+	m_boardP1 = std::make_shared<GameBoard>(*this);
 	add(m_boardP1);
 
-	m_boardP2 = std::make_shared<GameBoard>();
+	m_boardP2 = std::make_shared<GameBoard>(*this);
 	m_boardP2->setFirstPlayer(true);
 	add(m_boardP2);
 }
