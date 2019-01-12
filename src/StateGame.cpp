@@ -11,16 +11,31 @@ void StateGame::doInternalUpdate (float const elapsed)
 	
 }
 
-void StateGame::doCreate() 
+void StateGame::doInternalDraw() const 
+{
+	m_background->draw(getGame()->getRenderTarget());
+	drawObjects();
+	m_overlay->draw(getGame()->getRenderTarget());
+
+}
+
+void StateGame::doCreate()
 {
 	float w = static_cast<float>(getGame()->getRenderTarget()->getSize().x);
 	float h = static_cast<float>(getGame()->getRenderTarget()->getSize().y);
 	m_hud = std::make_shared<Hud>();
 	add(m_hud);
 
+
+
+
 	using JamTemplate::TweenAlpha;
 	using JamTemplate::SmartShape;
 
+	m_background = std::make_shared < SmartShape>();
+	m_background->makeRect({ w,h });
+	m_background->setColor(sf::Color{ 14, 16, 20 });
+	m_background->update(0.0f);
 
 	m_overlay = std::make_shared<SmartShape>();
 	m_overlay->makeRect(sf::Vector2f{ w,h });

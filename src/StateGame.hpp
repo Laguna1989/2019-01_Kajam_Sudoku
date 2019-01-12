@@ -26,12 +26,15 @@ private:
 
 	std::shared_ptr<Hud> m_hud;
 
+	std::shared_ptr<JamTemplate::SmartShape> m_background;
 	std::shared_ptr<JamTemplate::SmartShape> m_overlay;
+
 
 	std::shared_ptr <GameBoard> m_boardP1;
 	std::shared_ptr<GameBoard> m_boardP2;
 
 	void doInternalUpdate(float const elapsed) override;
+	virtual void doInternalDraw() const override;
 
 	void doCreate() override;
 

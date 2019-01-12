@@ -22,8 +22,8 @@ private:
 	void doCreate()
 	{
 
-		sf::Color bright = sf::Color{ 180,180,180 };
-		sf::Color dark = sf::Color{ 130,130,130 };
+		sf::Color bright = sf::Color{ 54, 98, 147 };
+		sf::Color dark = sf::Color{ 38, 69, 104 };
 
 		sf::Image img{};
 		img.create(static_cast<unsigned int>(GP::CellPositionSpacing() * 9), static_cast<unsigned int>(GP::CellPositionSpacing() * 9), bright);

@@ -47,6 +47,8 @@ private:
 	int m_selectorY{ 0 };
 	std::shared_ptr<JamTemplate::SmartShape> m_selector;
 
+	mutable std::shared_ptr<JamTemplate::SmartShape> m_hightlight;
+
 	std::vector<float> m_InputOffsetY;
 	std::vector<float> m_InputTimerOffset;
 

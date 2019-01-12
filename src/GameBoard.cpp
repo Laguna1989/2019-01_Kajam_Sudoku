@@ -222,21 +222,21 @@ void GameBoard::doDraw() const
 			m_text->setText(std::to_string(c->getValue()));
 			m_text->setCharacterSize(16U);
 			m_text->setPosition(pos + sf::Vector2f{ 2,2 });
-			
-			float v = (1 + m_InputOffsetY.at(idx) / GP::GameBoardInputOffsetMax()) ;
+
+			float v = (1 + m_InputOffsetY.at(idx) / GP::GameBoardInputOffsetMax());
 			if (v < 0) v = 0;
 			if (v > 1) v = 1;
 			sf::Uint8 a = static_cast<sf::Uint8>(155 + v * 100);
-			
 
-			m_text->setColor(sf::Color{ 30,30,30,a });
+
+			m_text->setColor(sf::Color{ 26, 29, 36,a });
 			m_text->update(0.0f);
 			m_text->draw(getGame()->getRenderTarget());
 
-			m_text->setPosition( pos + sf::Vector2f{0,  m_InputOffsetY.at(idx) });
-			
+			m_text->setPosition(pos + sf::Vector2f{ 0,  m_InputOffsetY.at(idx) });
+
 			m_text->update(0.0f);
-			m_text->setColor(sf::Color::White);
+			m_text->setColor(sf::Color{248, 249, 254});
 			m_text->draw(getGame()->getRenderTarget());	
 		}
 		idx++;
@@ -271,6 +271,8 @@ void GameBoard::getNextBoard()
 	m_selector->makeRect(sf::Vector2f{ GP::CellPositionSpacing() , GP::CellPositionSpacing() });
 	m_selector->setColor(sf::Color::Red);
 	m_selector->setPosition(positionFromCoord(m_selectorX, m_selectorY));
+
+	m_hightlight = std::make_shared<JamTemplate::SmartShape>();
 
 	
 	m_boardBackground.setTexture(JamTemplate::TextureManager::get("__gameboard"));
