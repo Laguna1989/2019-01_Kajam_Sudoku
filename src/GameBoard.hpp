@@ -44,6 +44,9 @@ private:
 	mutable std::shared_ptr<JamTemplate::SmartText> m_text;
 	std::shared_ptr<JamTemplate::SmartShape> m_selector;
 
+	float m_InputTimer{ 0 };
+	float m_InputOffsetY{ 0 };
+
 	StateGame& m_stateGame;
 	
 	int m_selectorX{ 0 };
@@ -62,18 +65,17 @@ private:
 	}
 
 	virtual void doUpdate(float const elapsed) override;
+	void updateInputTween(float elapsed);
+	void updateNumbers(float elapsed);
+	void updateSelector(float elapsed);
 
 	void checkForNextBoard();
 
 	void getNextBoard();
 
-	void updateNumbers(float elapsed);
-
 	void placeCorrectValue(std::shared_ptr<Cell> c, int num);
 
 	void placeWrongValue();
-
-	void updateSelector(float elapsed);
 
 	void moveCursorTo(int nextX, int nextY);
 

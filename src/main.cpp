@@ -7,7 +7,7 @@ int main()
 {
 
 	JamTemplate::Game::Sptr game = std::make_shared<JamTemplate::Game>();
-	game->setUp(1200, 700, 2, "VsSudoku");
+	game->setUp(1300, 700, 2, "VsSudoku");
 
 	auto window = game->getRenderWindow();
 	auto renderTexture = game->getRenderTarget();

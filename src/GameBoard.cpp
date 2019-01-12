@@ -29,6 +29,34 @@ void GameBoard::doUpdate(float const elapsed)
 	updateNumbers(elapsed);
 
 	checkForNextBoard();
+
+	if (JamTemplate::InputManager::justPressed(sf::Keyboard::Key::P))
+	{
+		getNextBoard();
+	}
+
+	updateInputTween(elapsed);
+}
+
+void GameBoard::updateInputTween(float elapsed)
+{
+	if (m_InputTimer > 0)
+	{
+
+
+		m_InputTimer -= elapsed;
+		float v = m_InputTimer / GP::GameBoardInputTimerMax();
+		if (v < 0) v = 0;
+		if (v > 1) v = 1;
+
+		float ov = JamTemplate::Lerp::cubic<float>(0, 1, v);
+		m_InputOffsetY = -ov * GP::GameBoardInputOffsetMax();
+
+	}
+	else
+	{
+		m_InputTimer = -1;
+	}
 }
 
 void GameBoard::updateNumbers(float /*elapsed*/)
@@ -85,7 +113,7 @@ void GameBoard::updateNumbers(float /*elapsed*/)
 			num = 9;
 	}
 	if (num == 0) return;
-	if (cc->getValue() == num)
+	if (cc->getValue() == static_cast<unsigned int>(num))
 	{
 		placeCorrectValue(c, num);
 	}
@@ -182,7 +210,7 @@ void GameBoard::doDraw() const
 	{
 		if (c->getValue() != 0)
 		{
-			m_text->setPosition(positionFromCoord(c->getPosition().x, c->getPosition().y) + sf::Vector2f{11,6});
+			m_text->setPosition(positionFromCoord(c->getPosition().x, c->getPosition().y) + sf::Vector2f{11,6 + m_InputOffsetY });
 			m_text->setText(std::to_string(c->getValue()));
 			m_text->update(0.0f);
 			m_text->setCharacterSize(16U);
@@ -197,6 +225,9 @@ void GameBoard::getNextBoard()
 	m_boardFull.clearBoard();
 	Serializer::Deserialize(m_puzzleList[m_puzzleListIdx], m_board, m_boardFull);
 	m_puzzleListIdx++;
+
+	m_InputTimer = GP::GameBoardInputTimerMax();
+
 }
 
  void GameBoard::doCreate()

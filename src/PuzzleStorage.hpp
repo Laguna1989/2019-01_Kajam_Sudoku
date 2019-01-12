@@ -17,7 +17,7 @@ public:
 	PuzzleStorage()
 	{
 		std::cout << "loading puzzles";
-		std::srand(std::time(0));	// seed it correctly
+		std::srand( static_cast<unsigned int>(std::time(0)) );	// seed it correctly
 		for (int i = 5; i != 50; ++i)
 		{
 			
@@ -46,7 +46,7 @@ public:
 		for (int i = 5; i != 50; ++i)
 		{
 			auto size = m_allPuzzles[i].size();
-			for (int j = 0; j != size /2-1; ++j)
+			for (size_t j = 0; j != size /2-1; ++j)
 			{
 				size_t ofs = firstPlayer ? 0 : size / 2;
 				retVal.push_back(m_allPuzzles[i][j + ofs]);

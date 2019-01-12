@@ -21,6 +21,7 @@ void StateGame::doCreate()
 	using JamTemplate::TweenAlpha;
 	using JamTemplate::SmartShape;
 
+
 	m_overlay = std::make_shared<SmartShape>();
 	m_overlay->makeRect(sf::Vector2f{ w,h });
 	m_overlay->setColor(sf::Color{ 0,0,0 });
@@ -28,20 +29,15 @@ void StateGame::doCreate()
 	auto tw = TweenAlpha<SmartShape>::create(m_overlay, 0.5f, sf::Uint8{ 255 }, sf::Uint8{ 0 });
 	add(tw);
 
-	std::cout << "sg1\n";
 	PuzzleStorage ps{};
 	
-	std::cout << "sg2\n";
 	m_boardP1 = std::make_shared<GameBoard>(*this);
-	std::cout << "sg3\n";
 	m_boardP1->setPuzzleList(std::move(ps.getPuzzleList(true)));
 	add(m_boardP1);
-	std::cout << "sg5\n";
+	
 	m_boardP2 = std::make_shared<GameBoard>(*this);
 	m_boardP2->setFirstPlayer(true);
-	std::cout << "sg5\n";
 	m_boardP2->setPuzzleList(std::move(ps.getPuzzleList(false)));
 	add(m_boardP2);
-	std::cout << "sg6\n";
-
+	
 }

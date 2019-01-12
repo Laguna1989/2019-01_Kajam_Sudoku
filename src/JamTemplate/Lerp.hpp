@@ -26,6 +26,23 @@ namespace JamTemplate
 			return linear(a, b, tRemapCosine);
 		}
 
+
+		template <typename T>
+		static T cubic(T const& a, T const& b, T const& t)
+		{
+			assert(t >= 0 && t <= 1);
+			float cub = t * t *t;
+			return linear(a, b, cub);
+		}
+
+		template <typename T>
+		static T cubicInvers(T const& a, T const& b, T const& t)
+		{
+			assert(t >= 0 && t <= 1);
+			float cub = (1-t) * (1-t) *(1-t);
+			return linear(a, b, cub);
+		}
+
 	private:
 		template <typename T>
 		static T precheck(T const& ti)
