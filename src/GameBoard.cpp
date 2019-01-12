@@ -148,6 +148,8 @@ void GameBoard::placeCorrectValue(std::shared_ptr<Cell> c, unsigned int num)
 	c->setValue(num);
 	checkForNextBoard();
 	setNewHighlights();
+	m_InputTimerOffset.at(posFromCoord(c->getPosition())) = GP::GameBoardInputTimerMax()/2.0f;
+	m_selector->flash(0.35f, sf::Color{51,143,63});
 }
 void GameBoard::placeWrongValue()
 {
@@ -155,6 +157,8 @@ void GameBoard::placeWrongValue()
 	{
 		m_wrongNumberCallback();
 	}
+	m_selector->shake(0.35, 2, 0.0125f);
+	m_selector->flash(0.45, sf::Color{ 143,33,33 });
 }
 
 void GameBoard::updateSelector(float elapsed)
@@ -307,9 +311,8 @@ void GameBoard::getNextBoard()
 	m_puzzleListIdx++;
 	for (auto& v : m_InputTimerOffset)
 	{
-		v = JamTemplate::Random::getFloatGauss(GP::GameBoardInputTimerMax(), 0.125f);
+		v = JamTemplate::Random::getFloatGauss(GP::GameBoardInputTimerMax(), 0.105f);
 	}
-	
 }
 
  void GameBoard::doCreate()

@@ -41,6 +41,11 @@ public:
 
 	void placeRandomCorrectNumber();
 
+	size_t posFromCoord(Coord c)
+	{
+		return c.x * 9 + c.y;
+	}
+
 private:
 	mutable Board m_board;
 	Board m_boardFull;
