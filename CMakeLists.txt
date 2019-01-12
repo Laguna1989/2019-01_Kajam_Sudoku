@@ -19,6 +19,7 @@ set (SUDOKUFILES
 	src/Sudoku/Coord.hpp
 	src/Sudoku/Cell.hpp
 	src/Sudoku/Board.hpp
+	src/Sudoku/Serializer.hpp
 	src/Sudoku/empty.cpp
 )
 
@@ -98,6 +99,8 @@ add_library(JamTemplate ${JAMTEMPLATEFILES})
 add_library(SudokuLib ${SUDOKUFILES})
 add_executable(${PROJECTNAME}  ${GAMEFILES})
 
+
+
 target_include_directories(JamTemplate PRIVATE ext/SFML-2.5.1_win/include)
 target_include_directories(JamTemplate PRIVATE ext/box2d)
 target_include_directories(JamTemplate PRIVATE /usr/local/Cellar/sfml/2.4.2_1/include) 
@@ -121,6 +124,10 @@ target_link_libraries(${PROJECTNAME} optimized sfml-graphics )
 target_link_libraries(${PROJECTNAME} JamTemplate)
 target_link_libraries(${PROJECTNAME} Box2D)
 target_link_libraries(${PROJECTNAME} SudokuLib)
+
+
+add_executable(SudokuCreator src/SudokuCreator/main.cpp)
+target_link_libraries(SudokuCreator SudokuLib)
 
 #####################################################
 ## copy sfml dlls around

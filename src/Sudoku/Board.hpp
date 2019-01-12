@@ -84,13 +84,8 @@ public:
 	std::shared_ptr<Cell> at(size_t idx) { return m_cells.at(idx); }
 
 
-
-	void createPuzzle(size_t upTo = 80)
+	void createPuzzle(size_t upTo = 10)
 	{
-		if (upTo > m_cells.size())
-		{
-			throw std::exception{};
-		}
 		fillBoard();
 		random_shuffle(m_cells.begin(), m_cells.end());
 		std::deque<std::shared_ptr<Cell>> cells;
@@ -102,14 +97,14 @@ public:
 		std::deque<std::shared_ptr<Cell>> toTest;
 		while (!cells.empty())
 		{
-			std::cout << toTest.size() << std::endl;
+			//std::cout << toTest.size() << std::endl;
 			auto value = cells.front()->getValue();
 			cells.front()->setValue(0);
 			toTest.push_front(cells.front());
 
 			if (doFillCell(toTest, 0) == 2)
 			{
-				std::cout << "not unique anymore!\n";
+				//std::cout << "not unique anymore!\n";
 				cells.front()->setValue(value);
 				toTest.pop_front();
 			}
@@ -181,7 +176,7 @@ public:
 
 			// go down recursively
 			value = doFillCell(remainingCells, value);
-			std::cout << remainingCells.size() << " " << value << "\n";
+			//std::cout << remainingCells.size() << " " << value << "\n";
 			if (value != 0)
 			{
 				if (value >= 2)
@@ -198,7 +193,7 @@ public:
 		return value;
 	}
 
-	std::shared_ptr<Cell> getCellAt(Coord const& coord)
+	std::shared_ptr<Cell> getCellAt(Coord const& coord) const
 	{
 		std::shared_ptr<Cell> ret{ nullptr };
 		for (auto& c : m_cells)
