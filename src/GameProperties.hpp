@@ -11,6 +11,7 @@ public:
 	static float CellPositionOffsetY() { return 10.0f; }
 	static float GameBoardInputTimerMax() { return 0.5f; }
 	static float GameBoardInputOffsetMax() { return 350; }
+	static unsigned int GameBoardMaxParse() { return 20; }
 };
 
 #endif

@@ -14,8 +14,10 @@ class PuzzleStorage
 public:
 	std::map<int, std::vector<std::string>> m_allPuzzles;
 
+
 	PuzzleStorage()
 	{
+		size_t N = GP::GameBoardMaxParse();
 		std::cout << "loading puzzles";
 		std::srand( static_cast<unsigned int>(std::time(0)) );	// seed it correctly
 		for (int i = 5; i != 50; ++i)
@@ -25,14 +27,19 @@ public:
 			std::ifstream in(fn);
 			std::string str;
 			std::cout <<  fn <<"\n";
+			size_t count = 0;
 			while (std::getline(in, str))
 			{
+
 				if (str.length() < 5) continue;
 
+				
 				Board p{};
 				Board s{};
 				Serializer::Deserialize(str, p, s);
 				m_allPuzzles[i].push_back(str);
+				count++;
+				if (count >= N) break;
 			}
 			std::random_shuffle(m_allPuzzles[i].begin(), m_allPuzzles[i].end());
 		}

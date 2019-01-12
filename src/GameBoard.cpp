@@ -1,6 +1,7 @@
 #include "GameBoard.hpp"
 #include "StateGame.hpp"
 
+#include "JamTemplate/TextureManager.hpp"
 #include "JamTemplate/Game.hpp"
 #include "JamTemplate/SmartText.hpp"
 #include "JamTemplate/SmartShape.hpp"
@@ -205,6 +206,8 @@ void GameBoard::moveCursorTo(int nextX, int nextY)
 
 void GameBoard::doDraw() const 
 {
+	getGame()->getRenderTarget()->draw(m_boardBackground);
+	
 	m_selector->draw(getGame()->getRenderTarget());
 	for (auto const& c : m_board)
 	{
@@ -232,7 +235,7 @@ void GameBoard::getNextBoard()
 
  void GameBoard::doCreate()
 {
-	 getNextBoard();
+	getNextBoard();
 
 	m_text = std::make_shared<JamTemplate::SmartText>();
 	m_text->loadFont("assets/font.ttf");
@@ -241,4 +244,8 @@ void GameBoard::getNextBoard()
 	m_selector->makeRect(sf::Vector2f{ GP::CellPositionSpacing() , GP::CellPositionSpacing() });
 	m_selector->setColor(sf::Color::Red);
 	m_selector->setPosition(positionFromCoord(m_selectorX, m_selectorY));
+
+	
+	m_boardBackground.setTexture(JamTemplate::TextureManager::get("__gameboard"));
+	m_boardBackground.setPosition(positionFromCoord(0,0));
 }
