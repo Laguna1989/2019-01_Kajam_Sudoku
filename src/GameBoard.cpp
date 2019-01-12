@@ -218,11 +218,26 @@ void GameBoard::doDraw() const
 		
 		if (c->getValue() != 0)
 		{
-			m_text->setPosition(positionFromCoord(c->getPosition().x, c->getPosition().y) + sf::Vector2f{11,6 + m_InputOffsetY.at(idx) });
+			auto pos = positionFromCoord(c->getPosition().x, c->getPosition().y) + sf::Vector2f{ 10,5 };
 			m_text->setText(std::to_string(c->getValue()));
-			m_text->update(0.0f);
 			m_text->setCharacterSize(16U);
+			m_text->setPosition(pos + sf::Vector2f{ 2,2 });
+			
+			float v = (1 + m_InputOffsetY.at(idx) / GP::GameBoardInputOffsetMax()) ;
+			if (v < 0) v = 0;
+			if (v > 1) v = 1;
+			sf::Uint8 a = static_cast<sf::Uint8>(155 + v * 100);
+			
+
+			m_text->setColor(sf::Color{ 30,30,30,a });
+			m_text->update(0.0f);
 			m_text->draw(getGame()->getRenderTarget());
+
+			m_text->setPosition( pos + sf::Vector2f{0,  m_InputOffsetY.at(idx) });
+			
+			m_text->update(0.0f);
+			m_text->setColor(sf::Color::White);
+			m_text->draw(getGame()->getRenderTarget());	
 		}
 		idx++;
 	}
