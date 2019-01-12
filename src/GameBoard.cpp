@@ -6,6 +6,8 @@
 #include "JamTemplate/SmartShape.hpp"
 #include "JamTemplate/TweenPosition.hpp"
 
+#include "Sudoku/Serializer.hpp"
+
 GameBoard::GameBoard(StateGame& sg) : m_stateGame(sg)
 {
 
@@ -15,10 +17,7 @@ void GameBoard::checkForNextBoard()
 {
 	if (m_board.getOpenFields() == 0)
 	{
-		m_board.clearBoard();
-		m_boardFull.clearBoard();
-		m_board.createPuzzle(5);
-		m_board.getSolution(m_boardFull);
+		getNextBoard();
 	}
 }
 
@@ -192,11 +191,17 @@ void GameBoard::doDraw() const
 	}
 };
 
+void GameBoard::getNextBoard()
+{
+	m_board.clearBoard();
+	m_boardFull.clearBoard();
+	Serializer::Deserialize(m_puzzleList[m_puzzleListIdx], m_board, m_boardFull);
+	m_puzzleListIdx++;
+}
+
  void GameBoard::doCreate()
 {
-	m_board.createPuzzle(2);
-
-	m_board.getSolution(m_boardFull);
+	 getNextBoard();
 
 	m_text = std::make_shared<JamTemplate::SmartText>();
 	m_text->loadFont("assets/font.ttf");

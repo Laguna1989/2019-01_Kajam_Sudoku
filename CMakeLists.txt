@@ -13,6 +13,7 @@ set (GAMEFILES
 	src/StateMenu.hpp
 	src/GameBoard.hpp
 	src/GameBoard.cpp
+	src/PuzzleStorage.hpp
 	)
 	
 set (SUDOKUFILES

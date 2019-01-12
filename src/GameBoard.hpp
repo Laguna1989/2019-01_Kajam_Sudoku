@@ -31,6 +31,12 @@ public:
 		m_firstPlayer = isFirstPlayer;
 	}
 	
+	void setPuzzleList(std::vector<std::string>&& list)
+	{
+		m_puzzleList = std::move(list);
+	}
+
+
 private:
 	mutable Board m_board;
 	Board m_boardFull;
@@ -45,6 +51,9 @@ private:
 
 	bool m_firstPlayer{ false };
 
+	std::vector<std::string> m_puzzleList;
+	size_t m_puzzleListIdx{ 0 };
+
 	inline sf::Vector2f positionFromCoord(int x, int y) const
 	{
 		return sf::Vector2f{
@@ -55,6 +64,8 @@ private:
 	virtual void doUpdate(float const elapsed) override;
 
 	void checkForNextBoard();
+
+	void getNextBoard();
 
 	void updateNumbers(float elapsed);
 
