@@ -41,22 +41,25 @@ void GameBoard::doUpdate(float const elapsed)
 
 void GameBoard::updateInputTween(float elapsed)
 {
-	if (m_InputTimer > 0)
+	assert(m_InputOffsetY.size() == m_InputTimerOffset.size());
+
+	for (size_t i = 0; i != m_InputOffsetY.size(); ++i)
 	{
+		if (m_InputTimerOffset.at(i) > 0)
+		{
+			m_InputTimerOffset.at(i) -= elapsed;
+			float v = m_InputTimerOffset.at(i) / GP::GameBoardInputTimerMax();
+			if (v < 0) v = 0;
+			if (v > 1) v = 1;
 
+			float ov = JamTemplate::Lerp::cubic<float>(0, 1, v);
+			m_InputOffsetY.at(i) = -ov * GP::GameBoardInputOffsetMax();
 
-		m_InputTimer -= elapsed;
-		float v = m_InputTimer / GP::GameBoardInputTimerMax();
-		if (v < 0) v = 0;
-		if (v > 1) v = 1;
-
-		float ov = JamTemplate::Lerp::cubic<float>(0, 1, v);
-		m_InputOffsetY = -ov * GP::GameBoardInputOffsetMax();
-
-	}
-	else
-	{
-		m_InputTimer = -1;
+		}
+		else
+		{
+			m_InputTimerOffset.at(i) = -1;
+		}
 	}
 }
 
@@ -209,16 +212,19 @@ void GameBoard::doDraw() const
 	getGame()->getRenderTarget()->draw(m_boardBackground);
 	
 	m_selector->draw(getGame()->getRenderTarget());
+	int idx = 0;
 	for (auto const& c : m_board)
 	{
+		
 		if (c->getValue() != 0)
 		{
-			m_text->setPosition(positionFromCoord(c->getPosition().x, c->getPosition().y) + sf::Vector2f{11,6 + m_InputOffsetY });
+			m_text->setPosition(positionFromCoord(c->getPosition().x, c->getPosition().y) + sf::Vector2f{11,6 + m_InputOffsetY.at(idx) });
 			m_text->setText(std::to_string(c->getValue()));
 			m_text->update(0.0f);
 			m_text->setCharacterSize(16U);
 			m_text->draw(getGame()->getRenderTarget());
 		}
+		idx++;
 	}
 };
 
@@ -228,13 +234,19 @@ void GameBoard::getNextBoard()
 	m_boardFull.clearBoard();
 	Serializer::Deserialize(m_puzzleList[m_puzzleListIdx], m_board, m_boardFull);
 	m_puzzleListIdx++;
-
-	m_InputTimer = GP::GameBoardInputTimerMax();
-
+	for (auto& v : m_InputTimerOffset)
+	{
+		v = JamTemplate::Random::getFloatGauss(GP::GameBoardInputTimerMax(), 0.125f);
+	}
+	
 }
 
  void GameBoard::doCreate()
 {
+	m_InputTimerOffset.resize(81, 0);
+	m_InputOffsetY.resize(81, 0);
+
+
 	getNextBoard();
 
 	m_text = std::make_shared<JamTemplate::SmartText>();

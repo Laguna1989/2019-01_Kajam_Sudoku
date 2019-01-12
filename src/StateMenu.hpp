@@ -30,8 +30,8 @@ private:
 		
 		for (int p = 0; p != 3; ++p)
 		{
-			int min = GP::CellPositionSpacing() * 3 *p;
-			int max = GP::CellPositionSpacing() * 3 * (p+1);
+			int min = static_cast<int>(GP::CellPositionSpacing() * 3 *p);
+			int max = static_cast<int>(GP::CellPositionSpacing() * 3 * (p+1));
 			for (int i = min; i != max; ++i)
 			for (int j = min; j != max; ++j)
 			{
@@ -42,11 +42,11 @@ private:
 			}
 		}
 		{
-			int minX = 0;
-			int maxX = GP::CellPositionSpacing() * 3;
+			int minX = static_cast<int>(0);
+			int maxX = static_cast<int>(GP::CellPositionSpacing() * 3);
 
-			int minY = GP::CellPositionSpacing()* 3 * 2;
-			int maxY = GP::CellPositionSpacing()* 3 * 3;
+			int minY = static_cast<int>(GP::CellPositionSpacing()* 3 * 2);
+			int maxY = static_cast<int>(GP::CellPositionSpacing()* 3 * 3);
 			
 			for (int i = minX; i != maxX; ++i)
 			for (int j = minY; j != maxY; ++j)

@@ -47,8 +47,8 @@ private:
 	int m_selectorY{ 0 };
 	std::shared_ptr<JamTemplate::SmartShape> m_selector;
 
-	float m_InputTimer{ 0 };
-	float m_InputOffsetY{ 0 };
+	std::vector<float> m_InputOffsetY;
+	std::vector<float> m_InputTimerOffset;
 
 	StateGame& m_stateGame;
 
