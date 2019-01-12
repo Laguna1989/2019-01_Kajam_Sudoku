@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <string>
+#include <functional>
 
 #include "JamTemplate/GameObject.hpp"
 
@@ -36,6 +37,9 @@ public:
 		m_puzzleList = std::move(list);
 	}
 
+	inline void setWrongNumberCallBack(std::function<void(void)> cb) { m_wrongNumberCallback = cb; }
+
+	void placeRandomCorrectNumber();
 
 private:
 	mutable Board m_board;
@@ -62,6 +66,9 @@ private:
 
 	sf::Sprite m_boardBackground;
 
+	std::function<void(void)> m_wrongNumberCallback;
+
+
 	inline sf::Vector2f positionFromCoord(int x, int y) const
 	{
 		return sf::Vector2f{
@@ -80,7 +87,7 @@ private:
 	void checkForNextBoard();
 	void getNextBoard();
 
-	void placeCorrectValue(std::shared_ptr<Cell> c, int num);
+	void placeCorrectValue(std::shared_ptr<Cell> c, unsigned int num);
 	void placeWrongValue();
 
 	void moveCursorTo(int nextX, int nextY);

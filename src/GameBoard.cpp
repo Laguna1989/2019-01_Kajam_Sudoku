@@ -23,6 +23,21 @@ void GameBoard::checkForNextBoard()
 	}
 }
 
+void GameBoard::placeRandomCorrectNumber()
+{
+	for (auto& c : m_board)
+	{
+		if (c->getValue() == 0)
+		{
+			auto sol = m_boardFull.getCellAt(c->getPosition())->getValue();
+			placeCorrectValue(c, sol);
+			break;
+		}
+	}
+	checkForNextBoard();
+	setNewHighlights();
+}
+
 void GameBoard::doUpdate(float const elapsed) 
 {
 	m_text->update(elapsed);
@@ -128,7 +143,7 @@ void GameBoard::updateNumbers(float /*elapsed*/)
 	}
 }
 
-void GameBoard::placeCorrectValue(std::shared_ptr<Cell> c, int num)
+void GameBoard::placeCorrectValue(std::shared_ptr<Cell> c, unsigned int num)
 {
 	c->setValue(num);
 	checkForNextBoard();
@@ -136,7 +151,10 @@ void GameBoard::placeCorrectValue(std::shared_ptr<Cell> c, int num)
 }
 void GameBoard::placeWrongValue()
 {
-
+	if (m_wrongNumberCallback.operator bool())
+	{
+		m_wrongNumberCallback();
+	}
 }
 
 void GameBoard::updateSelector(float elapsed)
@@ -209,10 +227,11 @@ void GameBoard::moveCursorTo(int nextX, int nextY)
 		auto tw = JamTemplate::TweenPosition<JamTemplate::SmartShape>::create(m_selector, 0.125, start, end);
 		m_stateGame.add(tw);
 	}
+
 	setNewHighlights();
 
-	{	// tween alpha of highlights
-		auto tw = JamTemplate::TweenAlpha<JamTemplate::SmartShape>::create(m_hightlight, 0.2, 0, 255);
+	{	// tween alpha of highlight
+		auto tw = JamTemplate::TweenAlpha<JamTemplate::SmartShape>::create(m_hightlight, 0.2f, 0, 255);
 		m_stateGame.add(tw);
 	}
 	
@@ -223,8 +242,8 @@ void GameBoard::setNewHighlights()
 {
 	m_highlightList.clear();
 	Coord spos{ m_selectorX, m_selectorY };
-	auto c = m_board.getCellAt(spos);
-	int v = c->getValue();
+	auto ct = m_board.getCellAt(spos);
+	auto v = ct->getValue();
 	if (v == 0) return;
 	
 	for (auto const& c : m_board)
