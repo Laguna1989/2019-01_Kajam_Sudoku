@@ -48,6 +48,7 @@ private:
 	std::shared_ptr<JamTemplate::SmartShape> m_selector;
 
 	mutable std::shared_ptr<JamTemplate::SmartShape> m_hightlight;
+	std::vector<Coord> m_highlightList;
 
 	std::vector<float> m_InputOffsetY;
 	std::vector<float> m_InputTimerOffset;
@@ -83,6 +84,7 @@ private:
 	void placeWrongValue();
 
 	void moveCursorTo(int nextX, int nextY);
+	void setNewHighlights();
 };
 
 #endif

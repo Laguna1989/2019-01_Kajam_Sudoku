@@ -6,6 +6,7 @@
 #include "JamTemplate/SmartText.hpp"
 #include "JamTemplate/SmartShape.hpp"
 #include "JamTemplate/TweenPosition.hpp"
+#include "JamTemplate/TweenAlpha.hpp"
 
 #include "Sudoku/Serializer.hpp"
 
@@ -29,7 +30,7 @@ void GameBoard::doUpdate(float const elapsed)
 	updateSelector(elapsed);
 	updateNumbers(elapsed);
 
-	checkForNextBoard();
+	
 
 	if (JamTemplate::InputManager::justPressed(sf::Keyboard::Key::P))
 	{
@@ -130,6 +131,8 @@ void GameBoard::updateNumbers(float /*elapsed*/)
 void GameBoard::placeCorrectValue(std::shared_ptr<Cell> c, int num)
 {
 	c->setValue(num);
+	checkForNextBoard();
+	setNewHighlights();
 }
 void GameBoard::placeWrongValue()
 {
@@ -144,15 +147,15 @@ void GameBoard::updateSelector(float elapsed)
 	int nextY = m_selectorY;
 	bool moved = false;
 	if (
-		JamTemplate::InputManager::justReleased(sf::Keyboard::Key::A) && m_firstPlayer ||
-		JamTemplate::InputManager::justReleased(sf::Keyboard::Key::Left) && !m_firstPlayer)
+		JamTemplate::InputManager::justPressed(sf::Keyboard::Key::A) && m_firstPlayer ||
+		JamTemplate::InputManager::justPressed(sf::Keyboard::Key::Left) && !m_firstPlayer)
 	{
 		nextX--;
 		moved = true;
 	}
 	if (
-		JamTemplate::InputManager::justReleased(sf::Keyboard::Key::D) && m_firstPlayer ||
-		JamTemplate::InputManager::justReleased(sf::Keyboard::Key::Right) && !m_firstPlayer)
+		JamTemplate::InputManager::justPressed(sf::Keyboard::Key::D) && m_firstPlayer ||
+		JamTemplate::InputManager::justPressed(sf::Keyboard::Key::Right) && !m_firstPlayer)
 	{
 		nextX++;
 		moved = true;
@@ -164,15 +167,15 @@ void GameBoard::updateSelector(float elapsed)
 		nextX = 8;
 
 	if (
-		JamTemplate::InputManager::justReleased(sf::Keyboard::Key::W) && m_firstPlayer ||
-		JamTemplate::InputManager::justReleased(sf::Keyboard::Key::Up) && !m_firstPlayer)
+		JamTemplate::InputManager::justPressed(sf::Keyboard::Key::W) && m_firstPlayer ||
+		JamTemplate::InputManager::justPressed(sf::Keyboard::Key::Up) && !m_firstPlayer)
 	{
 		nextY--;
 		moved = true;
 	}
 	if (
-		JamTemplate::InputManager::justReleased(sf::Keyboard::Key::S) && m_firstPlayer ||
-		JamTemplate::InputManager::justReleased(sf::Keyboard::Key::Down) && !m_firstPlayer)
+		JamTemplate::InputManager::justPressed(sf::Keyboard::Key::S) && m_firstPlayer ||
+		JamTemplate::InputManager::justPressed(sf::Keyboard::Key::Down) && !m_firstPlayer)
 	{
 		nextY++;
 		moved = true;
@@ -198,12 +201,39 @@ void GameBoard::moveCursorTo(int nextX, int nextY)
 	m_selectorX = nextX;
 	m_selectorY = nextY;
 
-	auto start = m_selector->getPosition();
-	auto end = positionFromCoord(m_selectorX, m_selectorY);
+	{	// tween to position
+		auto start = m_selector->getPosition();
+		auto end = positionFromCoord(m_selectorX, m_selectorY);
 
-	auto tw = JamTemplate::TweenPosition<JamTemplate::SmartShape>::create(m_selector, 0.125, start, end);
-	m_stateGame.add(tw);
 
+		auto tw = JamTemplate::TweenPosition<JamTemplate::SmartShape>::create(m_selector, 0.125, start, end);
+		m_stateGame.add(tw);
+	}
+	setNewHighlights();
+
+	{	// tween alpha of highlights
+		auto tw = JamTemplate::TweenAlpha<JamTemplate::SmartShape>::create(m_hightlight, 0.2, 0, 255);
+		m_stateGame.add(tw);
+	}
+	
+
+}
+
+void GameBoard::setNewHighlights()
+{
+	m_highlightList.clear();
+	Coord spos{ m_selectorX, m_selectorY };
+	auto c = m_board.getCellAt(spos);
+	int v = c->getValue();
+	if (v == 0) return;
+	
+	for (auto const& c : m_board)
+	{
+		if ((c->getPosition().x != spos.x || c->getPosition().y != spos.y)  && c->getValue() == v)
+		{
+			m_highlightList.push_back(c->getPosition());
+		}
+	}
 
 }
 
@@ -211,6 +241,13 @@ void GameBoard::doDraw() const
 {
 	getGame()->getRenderTarget()->draw(m_boardBackground);
 	
+	for (auto c : m_highlightList)
+	{
+		m_hightlight->setPosition(positionFromCoord(c.x, c.y));
+		m_hightlight->update(0.0f);
+		m_hightlight->draw(getGame()->getRenderTarget());
+	}
+
 	m_selector->draw(getGame()->getRenderTarget());
 	int idx = 0;
 	for (auto const& c : m_board)
@@ -269,11 +306,13 @@ void GameBoard::getNextBoard()
 
 	m_selector = std::make_shared<JamTemplate::SmartShape>();
 	m_selector->makeRect(sf::Vector2f{ GP::CellPositionSpacing() , GP::CellPositionSpacing() });
-	m_selector->setColor(sf::Color::Red);
+	m_selector->setColor(sf::Color{ 221,228,236 });
+	
 	m_selector->setPosition(positionFromCoord(m_selectorX, m_selectorY));
 
 	m_hightlight = std::make_shared<JamTemplate::SmartShape>();
-
+	m_hightlight->makeRect(sf::Vector2f{ GP::CellPositionSpacing() , GP::CellPositionSpacing() });
+	m_hightlight->setColor(sf::Color{ 163,183,205 });
 	
 	m_boardBackground.setTexture(JamTemplate::TextureManager::get("__gameboard"));
 	m_boardBackground.setPosition(positionFromCoord(0,0));
