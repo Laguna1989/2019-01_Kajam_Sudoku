@@ -6,6 +6,8 @@
 #include <vector>
 #include <memory>
 #include <iostream>
+#include <iterator>
+#include <algorithm>
 
 #include "Cell.hpp"
 
@@ -83,7 +85,7 @@ public:
 
 
 
-	void createPuzzle(int upTo = 80)
+	void createPuzzle(size_t upTo = 80)
 	{
 		if (upTo > m_cells.size())
 		{
@@ -92,7 +94,7 @@ public:
 		fillBoard();
 		random_shuffle(m_cells.begin(), m_cells.end());
 		std::deque<std::shared_ptr<Cell>> cells;
-		for (int m = 0; m != upTo; ++m)
+		for (size_t m = 0; m != upTo; ++m)
 		{
 			cells.push_back(m_cells.at(m));
 		}

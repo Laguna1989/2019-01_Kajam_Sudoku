@@ -6,7 +6,7 @@
 
 #include "JamTemplate/GameObject.hpp"
 
-#include "Board.hpp"
+#include "Sudoku/Board.hpp"
 #include "GameProperties.hpp"
 #include "JamTemplate/InputManager.hpp"
 

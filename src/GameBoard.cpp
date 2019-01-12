@@ -32,7 +32,7 @@ void GameBoard::doUpdate(float const elapsed)
 	checkForNextBoard();
 }
 
-void GameBoard::updateNumbers(float elapsed)
+void GameBoard::updateNumbers(float /*elapsed*/)
 {
 	auto c = m_board.getCellAt(Coord{ m_selectorX,m_selectorY });
 

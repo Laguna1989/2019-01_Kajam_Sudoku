@@ -3,7 +3,6 @@
 
 #include <string>
 #include <set>
-#include <SFML/Graphics.hpp>
 
 #include "Coord.hpp"
 

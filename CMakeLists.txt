@@ -11,12 +11,16 @@ set (GAMEFILES
 	src/StateGame.hpp
 	src/StateGame.cpp
 	src/StateMenu.hpp
-	src/Coord.hpp
-	src/Cell.hpp
-	src/Board.hpp
 	src/GameBoard.hpp
 	src/GameBoard.cpp
-	)	
+	)
+	
+set (SUDOKUFILES
+	src/Sudoku/Coord.hpp
+	src/Sudoku/Cell.hpp
+	src/Sudoku/Board.hpp
+	src/Sudoku/empty.cpp
+)
 
 #####################################################
 ## Other variables and compiler setup
@@ -91,6 +95,7 @@ target_include_directories(Box2D PRIVATE ext/box2d)
 #####################################################
 
 add_library(JamTemplate ${JAMTEMPLATEFILES})
+add_library(SudokuLib ${SUDOKUFILES})
 add_executable(${PROJECTNAME}  ${GAMEFILES})
 
 target_include_directories(JamTemplate PRIVATE ext/SFML-2.5.1_win/include)
@@ -115,6 +120,7 @@ target_link_libraries(${PROJECTNAME} optimized sfml-system )
 target_link_libraries(${PROJECTNAME} optimized sfml-graphics )
 target_link_libraries(${PROJECTNAME} JamTemplate)
 target_link_libraries(${PROJECTNAME} Box2D)
+target_link_libraries(${PROJECTNAME} SudokuLib)
 
 #####################################################
 ## copy sfml dlls around
