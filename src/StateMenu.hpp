@@ -5,7 +5,9 @@
 #include "JamTemplate/GameState.hpp"
 #include "JamTemplate/Game.hpp"
 #include "JamTemplate/TextureManager.hpp"
-#include "StateGame.hpp"
+#include "StateGameOnePlayer.hpp"
+#include "StateGameTwoPlayer.hpp"
+
 class StateMenu : public JamTemplate::GameState {
 public:
 	StateMenu() = default;
@@ -15,9 +17,12 @@ private:
 		//if (getAge() >= 0.25)
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
 		{
-			getGame()->switchState(std::make_shared<StateGame>());
+			getGame()->switchState(std::make_shared<StateGameOnePlayer>());
 		}
-		
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::B))
+		{
+			getGame()->switchState(std::make_shared<StateGameTwoPlayer>());
+		}
 	}
 	void doCreate()
 	{

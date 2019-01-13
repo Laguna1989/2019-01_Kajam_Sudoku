@@ -14,7 +14,6 @@
 namespace JamTemplate
 {
 	class SmartShape;
-	class GameBoard;
 }
 
 
@@ -30,14 +29,12 @@ private:
 	std::shared_ptr<JamTemplate::SmartShape> m_overlay;
 
 
-	std::shared_ptr <GameBoard> m_boardP1;
-	std::shared_ptr<GameBoard> m_boardP2;
-
-	void doInternalUpdate(float const elapsed) override;
-	virtual void doInternalDraw() const override;
-
 	void doCreate() override;
 
+	virtual void doCreateInternal();
+
+	virtual void doInternalUpdate(float const elapsed) override;
+	virtual void doInternalDraw() const override;
 };
 
 #endif

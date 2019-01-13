@@ -10,6 +10,10 @@ set (GAMEFILES
 	src/GameProperties.hpp
 	src/StateGame.hpp
 	src/StateGame.cpp
+	src/StateGameTwoPlayer.hpp
+	src/StateGameTwoPlayer.cpp
+	src/StateGameOnePlayer.hpp
+	src/StateGameOnePlayer.cpp
 	src/StateMenu.hpp
 	src/GameBoard.hpp
 	src/GameBoard.cpp

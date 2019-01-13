@@ -25,7 +25,7 @@ void StateGame::doCreate()
 	float w = static_cast<float>(getGame()->getRenderTarget()->getSize().x);
 	float h = static_cast<float>(getGame()->getRenderTarget()->getSize().y);
 	m_hud = std::make_shared<Hud>();
-	add(m_hud);
+	
 
 
 	using JamTemplate::TweenAlpha;
@@ -43,17 +43,13 @@ void StateGame::doCreate()
 	auto tw = TweenAlpha<SmartShape>::create(m_overlay, 0.5f, sf::Uint8{ 255 }, sf::Uint8{ 0 });
 	add(tw);
 
-	PuzzleStorage ps{};
-	
-	m_boardP1 = std::make_shared<GameBoard>(*this);
-	m_boardP1->setPuzzleList(std::move(ps.getPuzzleList(true)));
-	m_boardP1->setFirstPlayer(true);
-	add(m_boardP1);
-	
-	m_boardP2 = std::make_shared<GameBoard>(*this);
-	m_boardP2->setPuzzleList(std::move(ps.getPuzzleList(false)));
-	add(m_boardP2);
-	
-	m_boardP1->setWrongNumberCallBack([b = m_boardP2]() {b->placeRandomCorrectNumber(); });
-	m_boardP2->setWrongNumberCallBack([b = m_boardP1]() {b->placeRandomCorrectNumber(); });
+
+	doCreateInternal();
+	add(m_hud);
+}
+
+
+void StateGame::doCreateInternal()
+{
+
 }
