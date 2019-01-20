@@ -20,11 +20,15 @@ private:
 	std::shared_ptr<JamTemplate::SmartText>  m_text_1P;
 	std::shared_ptr<JamTemplate::SmartText>  m_text_2P;
 
+	bool m_modeSelect{ false };
+
 	void doInternalUpdate(float const /*elapsed*/) override;
 	void doCreate() override;
 	void doInternalDraw() const override;
 	void createImages();
 
+	void switchToLeft();
+	void switchToRight();
 
 };
 

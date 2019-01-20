@@ -6,24 +6,64 @@
 #include "GameProperties.hpp"
 #include "JamTemplate/SmartText.hpp"
 #include "JamTemplate/SmartShape.hpp"
+#include "JamTemplate/TweenScale.hpp"
 
 
 StateMenu::StateMenu() = default;
 void StateMenu::doInternalUpdate(float const /*elapsed*/)
 {
-	//if (getAge() >= 0.25)
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
+	using ip = JamTemplate::InputManager;
+	if (ip::justPressed(sf::Keyboard::Key::Space) || ip::justPressed(sf::Keyboard::Key::Return))
 	{
-		getGame()->switchState(std::make_shared<StateGameOnePlayer>());
+		if (m_modeSelect == false)
+		{
+			getGame()->switchState(std::make_shared<StateGameOnePlayer>());
+		}
+		else
+		{
+			getGame()->switchState(std::make_shared<StateGameTwoPlayer>());
+		}
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::B))
+	
+	if (ip::justPressed(sf::Keyboard::Key::A) || ip::justPressed(sf::Keyboard::Key::Left))
 	{
-		getGame()->switchState(std::make_shared<StateGameTwoPlayer>());
+		if (m_modeSelect == true)
+			switchToLeft();
+	}
+	if (ip::justPressed(sf::Keyboard::Key::D) || ip::justPressed(sf::Keyboard::Key::Right))
+	{
+		if (m_modeSelect == false)
+			switchToRight();
 	}
 }
+
+void StateMenu::switchToLeft()
+{
+	m_modeSelect = false;
+	using ts = JamTemplate::TweenScale<JamTemplate::SmartText>;
+	auto twl = ts::create(m_text_1P, 0.1f, m_text_1P->getScale(), { 1.5f,1.5f });
+	add(twl);
+
+	auto twr = ts::create(m_text_2P, 0.1f, m_text_2P->getScale(), { 1.0f,1.0f });
+	add(twr);
+
+}
+void StateMenu::switchToRight()
+{
+	m_modeSelect = true;
+
+	using ts = JamTemplate::TweenScale<JamTemplate::SmartText>;
+	auto twl = ts::create(m_text_2P, 0.1f, m_text_2P->getScale(), { 1.5f,1.5f });
+	add(twl);
+
+	auto twr = ts::create(m_text_1P, 0.1f, m_text_1P->getScale(), { 1.0f,1.0f });
+	add(twr);
+}
+
 void StateMenu::doCreate()
 {
 	createImages();
+	
 
 	float w = static_cast<float>(getGame()->getRenderTarget()->getSize().x);
 	float h = static_cast<float>(getGame()->getRenderTarget()->getSize().y);
@@ -60,6 +100,8 @@ void StateMenu::doCreate()
 	m_text_2P->setColor(sf::Color{ 248, 249, 254 });
 	m_text_2P->update(0.0f);
 	m_text_2P->SetTextAlign(JamTemplate::SmartText::TextAlign::CENTER);
+
+	switchToLeft();
 }
 void StateMenu::doInternalDraw() const
 {
