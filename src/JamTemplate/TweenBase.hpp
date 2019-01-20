@@ -41,7 +41,7 @@ namespace JamTemplate {
 				return;
 			}
 			m_age += elapsed;
-			if (m_age < m_startDelay) return;
+			//if (m_age < m_startDelay) return;
 			doUpdate(elapsed);
 		}
 		bool isAlive()

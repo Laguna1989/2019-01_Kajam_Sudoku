@@ -14,5 +14,5 @@ void StateGameOnePlayer::doCreateInternal()
 
 	m_hud->AddScoreP1();
 	m_boardP1->setCorrectNumberCallBack([this]() {m_hud->AddScoreP1(); });
-	//m_boardP1->setWrongNumberCallBack([b = m_boardP2]() {b->placeRandomCorrectNumber(); });
+	m_boardP1->setWrongNumberCallBack([this]() {m_hud->AddScoreP1(-1); });
 }

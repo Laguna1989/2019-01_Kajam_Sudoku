@@ -31,7 +31,7 @@ public:
 	{
 		m_firstPlayer = isFirstPlayer;
 	}
-	
+
 	void setPuzzleList(std::vector<std::string>&& list)
 	{
 		m_puzzleList = std::move(list);
@@ -62,6 +62,7 @@ private:
 
 	std::vector<float> m_InputOffsetY;
 	std::vector<float> m_InputTimerOffset;
+	int m_inputSkip{ 1 };
 
 	StateGame& m_stateGame;
 

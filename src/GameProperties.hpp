@@ -10,8 +10,8 @@ public:
 	static float CellPositionSpacing() { return 32.0f; }
 	static float CellPositionOffsetX() { return 10.0f; }
 	static float CellPositionOffsetY() { return 10.0f; }
-	static float GameBoardInputTimerMax() { return 0.5f; }
-	static float GameBoardInputOffsetMax() { return 350; }
+	static float GameBoardInputTimerMax() { return 0.6f; }
+	static float GameBoardInputOffsetMax() { return 300; }
 	static unsigned int GameBoardMaxParse() { return 20; }
 	
 	static sf::Color PaletteBackground() { return sf::Color{ 14, 16, 20 }; };

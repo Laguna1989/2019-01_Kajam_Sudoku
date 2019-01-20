@@ -17,9 +17,10 @@ public:
 private:
 	std::shared_ptr<JamTemplate::SmartShape> m_background;
 
-	std::shared_ptr<JamTemplate::SmartText>  m_text_Title;
+	mutable std::shared_ptr<JamTemplate::SmartText>  m_text_Title;
 	std::shared_ptr<JamTemplate::SmartText>  m_text_1P;
 	std::shared_ptr<JamTemplate::SmartText>  m_text_2P;
+	std::shared_ptr<JamTemplate::SmartText>  m_text_Credits;
 
 	std::shared_ptr<JamTemplate::SmartShape> m_overlay;
 

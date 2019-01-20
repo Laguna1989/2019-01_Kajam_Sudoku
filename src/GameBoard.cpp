@@ -57,7 +57,14 @@ void GameBoard::doUpdate(float const elapsed)
 
 void GameBoard::updateInputTween(float elapsed)
 {
+
 	assert(m_InputOffsetY.size() == m_InputTimerOffset.size());
+
+	if (m_inputSkip > 0)
+	{
+		m_inputSkip--;
+		return;
+	}
 
 	for (size_t i = 0; i != m_InputOffsetY.size(); ++i)
 	{

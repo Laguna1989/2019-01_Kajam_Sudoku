@@ -8,10 +8,11 @@
 #include "JamTemplate/SmartShape.hpp"
 #include "JamTemplate/TweenScale.hpp"
 #include "JamTemplate/TweenAlpha.hpp"
+#include "JamTemplate/TweenPosition.hpp"
 
 
 StateMenu::StateMenu() = default;
-void StateMenu::doInternalUpdate(float const /*elapsed*/)
+void StateMenu::doInternalUpdate(float const elapsed)
 {
 	if (m_starting == false)
 	{
@@ -47,6 +48,10 @@ void StateMenu::doInternalUpdate(float const /*elapsed*/)
 			if (m_modeSelect == false)
 				switchToRight();
 		}
+
+		m_text_Title->update(elapsed);
+		m_text_1P->update(elapsed);
+		m_text_2P->update(elapsed);
 	}
 	else
 	{
@@ -118,6 +123,14 @@ void StateMenu::doCreate()
 	m_text_2P->update(0.0f);
 	m_text_2P->SetTextAlign(JamTemplate::SmartText::TextAlign::CENTER);
 
+	m_text_Credits = std::make_shared<JamTemplate::SmartText>();
+	m_text_Credits->loadFont("assets/font.ttf");
+	m_text_Credits->setCharacterSize(12U);
+	m_text_Credits->setText("Created by @Laguna_999 for #kajam\nJanuar 2019");
+	m_text_Credits->setPosition({ 10, 310 });
+	m_text_Credits->setColor(sf::Color{ 248, 249, 254 });
+	m_text_Credits->SetTextAlign(JamTemplate::SmartText::TextAlign::LEFT);
+	m_text_Credits->update(0.0f);
 	switchToLeft();
 
 
@@ -125,19 +138,60 @@ void StateMenu::doCreate()
 	m_overlay->makeRect(sf::Vector2f{ w,h });
 	m_overlay->setColor(sf::Color{ 0,0,0 });
 	m_overlay->update(0);
+	
+	{
+		auto tw = JamTemplate::TweenAlpha<JamTemplate::SmartShape>::create(m_overlay, 0.5f, sf::Uint8{ 255 }, sf::Uint8{ 0 });
+		tw->setSkipFrames();
+		add(tw);
+	}
+	{
+		using tp = JamTemplate::TweenPosition<JamTemplate::SmartText>;
+		auto tw1 = tp::create(m_text_Title, 0.25f, (m_text_Title->getPosition() + sf::Vector2f{ 0,-80 }), m_text_Title->getPosition());
+		tw1->setStartDelay(0.1f);
+		tw1->setSkipFrames();
+		add(tw1);
 
-	auto tw = JamTemplate::TweenAlpha<JamTemplate::SmartShape>::create(m_overlay, 0.5f, sf::Uint8{ 255 }, sf::Uint8{ 0 });
-	tw->setSkipFrames();
-	add(tw);
+		auto s2 = m_text_1P->getPosition() + sf::Vector2f{ -300,0 };
+		auto e2 = m_text_1P->getPosition();
+		auto tw2 = tp::create(m_text_1P, 0.35f,s2 , e2);
+		tw2->setStartDelay(0.3f);
+		tw2->setSkipFrames();
+		add(tw2);
+
+
+		auto s3 = m_text_2P->getPosition() + sf::Vector2f{ 300,0 };
+		auto e3 = m_text_2P->getPosition();
+		auto tw3 = tp::create(m_text_2P, 0.35f, s3, e3);
+		tw3->setStartDelay(0.4f);
+		tw3->setSkipFrames();
+		add(tw3);
+	}
+
 
 }
 void StateMenu::doInternalDraw() const
 {
 	m_background->draw(getGame()->getRenderTarget());
+
+	float w = static_cast<float>(getGame()->getRenderTarget()->getSize().x);
+	float wC = w / 2;
+
+	m_text_Title->setPosition({ wC + 2, 20 + 2 });
+	m_text_Title->setColor(GP::PaletteFontShadow());
+	m_text_Title->update(0.0f);
 	m_text_Title->draw(getGame()->getRenderTarget());
+
+
+	m_text_Title->setPosition({ wC, 20 });
+	m_text_Title->setColor(GP::PaletteFontFront());
+	m_text_Title->update(0.0f);
+	m_text_Title->draw(getGame()->getRenderTarget());	
+	
 	m_text_1P->draw(getGame()->getRenderTarget());
 	m_text_2P->draw(getGame()->getRenderTarget());
+	m_text_Credits->draw(getGame()->getRenderTarget());
 	m_overlay->draw(getGame()->getRenderTarget());
+	
 }
 
 
