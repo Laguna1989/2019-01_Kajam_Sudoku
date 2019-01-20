@@ -16,6 +16,13 @@ namespace JamTemplate
 	{
 	public:
 
+		enum class TextAlign
+		{
+			CENTER,
+			LEFT,
+			RIGHT
+		};
+
 		using Sptr = std::shared_ptr<SmartText>;
 		
 		virtual ~SmartText()
@@ -122,19 +129,33 @@ namespace JamTemplate
 			return m_text->getOrigin();
 		}
 
-		
+		void SetTextAlign(TextAlign ta)
+		{
+			m_textAlign = ta;
+		}
+		TextAlign getTextAlign() const
+		{
+			return m_textAlign;
+		}
 
 	private:
 		std::shared_ptr<sf::Text> m_text;
 		std::shared_ptr<sf::Text> m_flashText;
 		std::shared_ptr<sf::Font> m_font;
 		
+		TextAlign m_textAlign{ TextAlign::CENTER };
+		
 		sf::Vector2f m_position{0,0};
 
 		void doUpdate(float /*elapsed*/) override
 		{
 			m_text->setFont(*m_font);
-			m_text->setPosition(m_position + getShakeOffset() + getOffset() + getCamOffset());
+			sf::Vector2f alignOffset{};
+			if (m_textAlign != TextAlign::LEFT)
+				alignOffset.x = m_text->getGlobalBounds().width / (m_textAlign == TextAlign::CENTER ? 2.0f : 1.0f);
+			sf::Vector2f pos = m_position + getShakeOffset() + getOffset() + getCamOffset() - alignOffset;
+			sf::Vector2i posi { static_cast<int>(pos.x), static_cast<int>(pos.y) };
+			m_text->setPosition(sf::Vector2f {static_cast<float>(posi.x), static_cast<float>(posi.y) });
 			m_flashText->setPosition(m_position + getShakeOffset() + getOffset() + getCamOffset());
 			m_flashText->setScale(m_text->getScale());
 		}

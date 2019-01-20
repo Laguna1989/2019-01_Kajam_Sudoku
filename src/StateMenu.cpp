@@ -41,22 +41,25 @@ void StateMenu::doCreate()
 	m_text_Title->setPosition({ wC, 20});
 	m_text_Title->setColor(sf::Color{ 248, 249, 254 });
 	m_text_Title->update(0.0f);
+	m_text_Title->SetTextAlign(JamTemplate::SmartText::TextAlign::CENTER);
 
 	m_text_1P = std::make_shared<JamTemplate::SmartText>();
 	m_text_1P->loadFont("assets/font.ttf");
 	m_text_1P->setCharacterSize(16U);
 	m_text_1P->setText("Single Player");
-	m_text_1P->setPosition({ wC - 200, 100 });
+	m_text_1P->setPosition({ wC - 200, 150 });
 	m_text_1P->setColor(sf::Color{ 248, 249, 254 });
 	m_text_1P->update(0.0f);
+	m_text_1P->SetTextAlign(JamTemplate::SmartText::TextAlign::CENTER);
 
 	m_text_2P = std::make_shared<JamTemplate::SmartText>();
 	m_text_2P->loadFont("assets/font.ttf");
 	m_text_2P->setCharacterSize(16U);
 	m_text_2P->setText("Versus Mode");
-	m_text_2P->setPosition({ wC+ 200, 100 });
+	m_text_2P->setPosition({ wC+ 200, 150 });
 	m_text_2P->setColor(sf::Color{ 248, 249, 254 });
 	m_text_2P->update(0.0f);
+	m_text_2P->SetTextAlign(JamTemplate::SmartText::TextAlign::CENTER);
 }
 void StateMenu::doInternalDraw() const
 {
