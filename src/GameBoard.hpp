@@ -38,6 +38,7 @@ public:
 	}
 
 	inline void setWrongNumberCallBack(std::function<void(void)> cb) { m_wrongNumberCallback = cb; }
+	inline void setCorrectNumberCallBack(std::function<void(void)> cb) { m_correctNumberCallback = cb; }
 
 	void placeRandomCorrectNumber();
 
@@ -72,6 +73,7 @@ private:
 	sf::Sprite m_boardBackground;
 
 	std::function<void(void)> m_wrongNumberCallback;
+	std::function<void(void)> m_correctNumberCallback;
 
 
 	inline sf::Vector2f positionFromCoord(int x, int y) const

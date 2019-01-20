@@ -4,11 +4,13 @@
 #include "JamTemplate/SmartShape.hpp"
 #include "JamTemplate/TweenAlpha.hpp"
 #include "PuzzleStorage.hpp"
+#include "JamTemplate/Game.hpp"
+
+#include "Hud.hpp"
 
 void StateGame::doInternalUpdate (float const elapsed) 
 {
-	m_overlay->update(elapsed);
-	
+	m_overlay->update(elapsed);	
 }
 
 void StateGame::doInternalDraw() const 
@@ -18,16 +20,12 @@ void StateGame::doInternalDraw() const
 	m_overlay->draw(getGame()->getRenderTarget());
 }
 
-
-
 void StateGame::doCreate()
 {
 	float w = static_cast<float>(getGame()->getRenderTarget()->getSize().x);
 	float h = static_cast<float>(getGame()->getRenderTarget()->getSize().y);
 	m_hud = std::make_shared<Hud>();
 	
-
-
 	using JamTemplate::TweenAlpha;
 	using JamTemplate::SmartShape;
 
@@ -48,8 +46,6 @@ void StateGame::doCreate()
 	add(m_hud);
 }
 
-
 void StateGame::doCreateInternal()
 {
-
 }

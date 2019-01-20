@@ -150,6 +150,7 @@ void GameBoard::placeCorrectValue(std::shared_ptr<Cell> c, unsigned int num)
 	setNewHighlights();
 	m_InputTimerOffset.at(posFromCoord(c->getPosition())) = GP::GameBoardInputTimerMax()/2.0f;
 	m_selector->flash(0.35f, sf::Color{51,143,63});
+	m_correctNumberCallback();
 }
 void GameBoard::placeWrongValue()
 {
@@ -157,8 +158,8 @@ void GameBoard::placeWrongValue()
 	{
 		m_wrongNumberCallback();
 	}
-	m_selector->shake(0.35, 2, 0.0125f);
-	m_selector->flash(0.45, sf::Color{ 143,33,33 });
+	m_selector->shake(0.35f, 2, 0.0125f);
+	m_selector->flash(0.45f, sf::Color{ 143,33,33 });
 }
 
 void GameBoard::updateSelector(float elapsed)

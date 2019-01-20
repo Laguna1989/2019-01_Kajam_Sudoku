@@ -1,7 +1,7 @@
 #include "StateGameTwoPlayer.hpp"
-
 #include "PuzzleStorage.hpp"
-
+#include "GameBoard.hpp"
+#include "Hud.hpp"
 
 void StateGameTwoPlayer::doCreateInternal()
 {
@@ -16,6 +16,11 @@ void StateGameTwoPlayer::doCreateInternal()
 	m_boardP2->setPuzzleList(std::move(ps.getPuzzleList(false)));
 	add(m_boardP2);
 	
-	m_boardP1->setWrongNumberCallBack([b = m_boardP2]() {b->placeRandomCorrectNumber(); });
-	m_boardP2->setWrongNumberCallBack([b = m_boardP1]() {b->placeRandomCorrectNumber(); });
+	m_boardP1->setWrongNumberCallBack([b = m_boardP2, this]() {b->placeRandomCorrectNumber(); m_hud->AddScoreP1(-1); });
+	m_boardP2->setWrongNumberCallBack([b = m_boardP1, this]() {b->placeRandomCorrectNumber(); m_hud->AddScoreP2(-1); });
+
+	m_boardP1->setCorrectNumberCallBack([this]() {m_hud->AddScoreP1(); });
+	m_boardP2->setCorrectNumberCallBack([this]() {m_hud->AddScoreP2(); });
+	m_hud->AddScoreP1();
+	m_hud->AddScoreP2();
 }

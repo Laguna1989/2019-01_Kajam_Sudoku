@@ -1,5 +1,7 @@
 #include "StateGameOnePlayer.hpp"
 #include "PuzzleStorage.hpp"
+#include "GameBoard.hpp"
+#include "Hud.hpp"
 
 void StateGameOnePlayer::doCreateInternal()
 {
@@ -10,5 +12,7 @@ void StateGameOnePlayer::doCreateInternal()
 	m_boardP1->setFirstPlayer(true);
 	add(m_boardP1);
 
+	m_hud->AddScoreP1();
+	m_boardP1->setCorrectNumberCallBack([this]() {m_hud->AddScoreP1(); });
 	//m_boardP1->setWrongNumberCallBack([b = m_boardP2]() {b->placeRandomCorrectNumber(); });
 }

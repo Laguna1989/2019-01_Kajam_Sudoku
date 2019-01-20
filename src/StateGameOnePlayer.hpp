@@ -5,15 +5,13 @@
 #include <vector>
 #include <memory>
 
-
-#include "Hud.hpp"
-#include "GameBoard.hpp"
 #include "StateGame.hpp"
 
 namespace JamTemplate
 {
 	class SmartShape;
 }
+class GameBoard;
 
 
 class StateGameOnePlayer : public StateGame {

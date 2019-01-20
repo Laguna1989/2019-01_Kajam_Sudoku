@@ -9,6 +9,8 @@
 #include <fstream>
 #include <ctime>
 
+#include "GameProperties.hpp"
+
 class PuzzleStorage
 {
 public:
@@ -25,6 +27,11 @@ public:
 			
 			std::string fn = "assets/p_" + std::to_string(i) + ".puz";
 			std::ifstream in(fn);
+			if (in.fail())
+			{
+				std::cerr << "error, cannot load puzzle file:  " << fn << " . Please run SudokuCreatror!" << std::endl;
+				throw std::exception("cannot load sudoku file.");
+			}
 			std::string str;
 			std::cout <<  fn <<"\n";
 			size_t count = 0;
@@ -48,11 +55,11 @@ public:
 
 	std::vector<std::string> getPuzzleList(bool firstPlayer = true)
 	{
-		std::cout << "copy puzzles\n";
 		std::vector<std::string> retVal;
 		for (int i = 5; i != 50; ++i)
 		{
 			auto size = m_allPuzzles[i].size();
+			
 			for (size_t j = 0; j != size /2-1; ++j)
 			{
 				size_t ofs = firstPlayer ? 0 : size / 2;

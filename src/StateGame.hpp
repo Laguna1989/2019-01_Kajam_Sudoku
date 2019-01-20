@@ -7,23 +7,22 @@
 
 #include "JamTemplate/GameState.hpp"
 
-
-#include "Hud.hpp"
-#include "GameBoard.hpp"
-
+// fwd decls
 namespace JamTemplate
 {
 	class SmartShape;
 }
 
+class Hud;
 
 class StateGame : public JamTemplate::GameState {
 public:
 	StateGame() = default;
-
+protected:
+	std::shared_ptr<Hud> m_hud;
 private:
 
-	std::shared_ptr<Hud> m_hud;
+	
 
 	std::shared_ptr<JamTemplate::SmartShape> m_background;
 	std::shared_ptr<JamTemplate::SmartShape> m_overlay;

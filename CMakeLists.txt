@@ -15,9 +15,12 @@ set (GAMEFILES
 	src/StateGameOnePlayer.hpp
 	src/StateGameOnePlayer.cpp
 	src/StateMenu.hpp
+	src/StateMenu.cpp
 	src/GameBoard.hpp
 	src/GameBoard.cpp
 	src/PuzzleStorage.hpp
+	src/Hud.hpp
+	src/Hud.cpp
 	)
 	
 set (SUDOKUFILES
