@@ -149,7 +149,7 @@ void GameBoard::placeCorrectValue(std::shared_ptr<Cell> c, unsigned int num)
 	checkForNextBoard();
 	setNewHighlights();
 	m_InputTimerOffset.at(posFromCoord(c->getPosition())) = GP::GameBoardInputTimerMax()/2.0f;
-	m_selector->flash(0.35f, sf::Color{51,143,63});
+	m_selector->flash(0.35f, GP::PaletteFlashGreen());
 	m_correctNumberCallback();
 }
 void GameBoard::placeWrongValue()
@@ -159,7 +159,7 @@ void GameBoard::placeWrongValue()
 		m_wrongNumberCallback();
 	}
 	m_selector->shake(0.35f, 2, 0.0125f);
-	m_selector->flash(0.45f, sf::Color{ 143,33,33 });
+	m_selector->flash(0.45f, GP::PaletteFlashRed());
 }
 
 void GameBoard::updateSelector(float elapsed)
@@ -289,15 +289,14 @@ void GameBoard::doDraw() const
 			if (v > 1) v = 1;
 			sf::Uint8 a = static_cast<sf::Uint8>(155 + v * 100);
 
-
-			m_text->setColor(sf::Color{ 26, 29, 36,a });
+			m_text->setColor(GP::PaletteFontShadow(a));
 			m_text->update(0.0f);
 			m_text->draw(getGame()->getRenderTarget());
 
 			m_text->setPosition(pos + sf::Vector2f{ 0,  m_InputOffsetY.at(idx) });
 
 			m_text->update(0.0f);
-			m_text->setColor(sf::Color{248, 249, 254});
+			m_text->setColor(GP::PaletteFontFront());
 			m_text->draw(getGame()->getRenderTarget());	
 		}
 		idx++;
@@ -329,13 +328,13 @@ void GameBoard::getNextBoard()
 
 	m_selector = std::make_shared<JamTemplate::SmartShape>();
 	m_selector->makeRect(sf::Vector2f{ GP::CellPositionSpacing() , GP::CellPositionSpacing() });
-	m_selector->setColor(sf::Color{ 221,228,236 });
+	m_selector->setColor(GP::PaletteSelector());
 	
 	m_selector->setPosition(positionFromCoord(m_selectorX, m_selectorY));
 
 	m_hightlight = std::make_shared<JamTemplate::SmartShape>();
 	m_hightlight->makeRect(sf::Vector2f{ GP::CellPositionSpacing() , GP::CellPositionSpacing() });
-	m_hightlight->setColor(sf::Color{ 163,183,205 });
+	m_hightlight->setColor(GP::PaletteHighlight());
 	
 	m_boardBackground.setTexture(JamTemplate::TextureManager::get("__gameboard"));
 	m_boardBackground.setPosition(positionFromCoord(0,0));

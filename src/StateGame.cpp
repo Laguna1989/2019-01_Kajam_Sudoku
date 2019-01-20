@@ -31,7 +31,7 @@ void StateGame::doCreate()
 
 	m_background = std::make_shared < SmartShape>();
 	m_background->makeRect({ w,h });
-	m_background->setColor(sf::Color{ 14, 16, 20 });
+	m_background->setColor(GP::PaletteBackground());
 	m_background->update(0.0f);
 
 	m_overlay = std::make_shared<SmartShape>();

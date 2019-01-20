@@ -4,6 +4,8 @@
 #include "StateGameOnePlayer.hpp"
 #include "StateGameTwoPlayer.hpp"
 #include "GameProperties.hpp"
+#include "JamTemplate/SmartText.hpp"
+#include "JamTemplate/SmartShape.hpp"
 
 
 StateMenu::StateMenu() = default;
@@ -21,7 +23,56 @@ void StateMenu::doInternalUpdate(float const /*elapsed*/)
 }
 void StateMenu::doCreate()
 {
+	createImages();
 
+	float w = static_cast<float>(getGame()->getRenderTarget()->getSize().x);
+	float h = static_cast<float>(getGame()->getRenderTarget()->getSize().y);
+	float wC = w / 2;
+
+	m_background = std::make_shared < JamTemplate::SmartShape>();
+	m_background->makeRect({ w,h });
+	m_background->setColor(GP::PaletteBackground());
+	m_background->update(0.0f);
+
+	m_text_Title = std::make_shared<JamTemplate::SmartText>();
+	m_text_Title->loadFont("assets/font.ttf");
+	m_text_Title->setCharacterSize(32U);
+	m_text_Title->setText("VsSudoku");
+	m_text_Title->setPosition({ wC, 20});
+	m_text_Title->setColor(sf::Color{ 248, 249, 254 });
+	m_text_Title->update(0.0f);
+
+	m_text_1P = std::make_shared<JamTemplate::SmartText>();
+	m_text_1P->loadFont("assets/font.ttf");
+	m_text_1P->setCharacterSize(16U);
+	m_text_1P->setText("Single Player");
+	m_text_1P->setPosition({ wC - 200, 100 });
+	m_text_1P->setColor(sf::Color{ 248, 249, 254 });
+	m_text_1P->update(0.0f);
+
+	m_text_2P = std::make_shared<JamTemplate::SmartText>();
+	m_text_2P->loadFont("assets/font.ttf");
+	m_text_2P->setCharacterSize(16U);
+	m_text_2P->setText("Versus Mode");
+	m_text_2P->setPosition({ wC+ 200, 100 });
+	m_text_2P->setColor(sf::Color{ 248, 249, 254 });
+	m_text_2P->update(0.0f);
+}
+void StateMenu::doInternalDraw() const
+{
+	m_background->draw(getGame()->getRenderTarget());
+	m_text_Title->draw(getGame()->getRenderTarget());
+	m_text_1P->draw(getGame()->getRenderTarget());
+	m_text_2P->draw(getGame()->getRenderTarget());
+}
+
+
+
+
+
+
+void StateMenu::createImages()
+{
 	sf::Color bright = sf::Color{ 54, 98, 147 };
 	sf::Color dark = sf::Color{ 38, 69, 104 };
 
@@ -67,8 +118,6 @@ void StateMenu::doCreate()
 
 			}
 	}
-
-
 
 	sf::Texture t{};
 	t.loadFromImage(img);
