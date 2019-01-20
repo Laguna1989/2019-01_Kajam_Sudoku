@@ -7,33 +7,50 @@
 #include "JamTemplate/SmartText.hpp"
 #include "JamTemplate/SmartShape.hpp"
 #include "JamTemplate/TweenScale.hpp"
+#include "JamTemplate/TweenAlpha.hpp"
 
 
 StateMenu::StateMenu() = default;
 void StateMenu::doInternalUpdate(float const /*elapsed*/)
 {
-	using ip = JamTemplate::InputManager;
-	if (ip::justPressed(sf::Keyboard::Key::Space) || ip::justPressed(sf::Keyboard::Key::Return))
+	if (m_starting == false)
 	{
-		if (m_modeSelect == false)
+		using ip = JamTemplate::InputManager;
+		if (ip::justPressed(sf::Keyboard::Key::Space) || ip::justPressed(sf::Keyboard::Key::Return))
 		{
-			getGame()->switchState(std::make_shared<StateGameOnePlayer>());
+			if (m_modeSelect == false)
+			{
+				m_starting = true;
+				auto tw = JamTemplate::TweenAlpha<JamTemplate::SmartShape>::create(m_overlay, 0.5f, sf::Uint8{ 0 }, sf::Uint8{ 255 });
+				tw->setSkipFrames();
+				tw->addCompleteCallback([this]() {getGame()->switchState(std::make_shared<StateGameOnePlayer>());  });
+				add(tw);
+			}
+			else
+			{
+				m_starting = true;
+
+				auto tw = JamTemplate::TweenAlpha<JamTemplate::SmartShape>::create(m_overlay, 0.5f, sf::Uint8{ 0 }, sf::Uint8{ 255 });
+				tw->setSkipFrames();
+				tw->addCompleteCallback([this]() {getGame()->switchState(std::make_shared<StateGameTwoPlayer>());  });
+				add(tw);
+			}
 		}
-		else
+
+		if (ip::justPressed(sf::Keyboard::Key::A) || ip::justPressed(sf::Keyboard::Key::Left))
 		{
-			getGame()->switchState(std::make_shared<StateGameTwoPlayer>());
+			if (m_modeSelect == true)
+				switchToLeft();
+		}
+		if (ip::justPressed(sf::Keyboard::Key::D) || ip::justPressed(sf::Keyboard::Key::Right))
+		{
+			if (m_modeSelect == false)
+				switchToRight();
 		}
 	}
-	
-	if (ip::justPressed(sf::Keyboard::Key::A) || ip::justPressed(sf::Keyboard::Key::Left))
+	else
 	{
-		if (m_modeSelect == true)
-			switchToLeft();
-	}
-	if (ip::justPressed(sf::Keyboard::Key::D) || ip::justPressed(sf::Keyboard::Key::Right))
-	{
-		if (m_modeSelect == false)
-			switchToRight();
+
 	}
 }
 
@@ -102,6 +119,17 @@ void StateMenu::doCreate()
 	m_text_2P->SetTextAlign(JamTemplate::SmartText::TextAlign::CENTER);
 
 	switchToLeft();
+
+
+	m_overlay = std::make_shared<JamTemplate::SmartShape>();
+	m_overlay->makeRect(sf::Vector2f{ w,h });
+	m_overlay->setColor(sf::Color{ 0,0,0 });
+	m_overlay->update(0);
+
+	auto tw = JamTemplate::TweenAlpha<JamTemplate::SmartShape>::create(m_overlay, 0.5f, sf::Uint8{ 255 }, sf::Uint8{ 0 });
+	tw->setSkipFrames();
+	add(tw);
+
 }
 void StateMenu::doInternalDraw() const
 {
@@ -109,6 +137,7 @@ void StateMenu::doInternalDraw() const
 	m_text_Title->draw(getGame()->getRenderTarget());
 	m_text_1P->draw(getGame()->getRenderTarget());
 	m_text_2P->draw(getGame()->getRenderTarget());
+	m_overlay->draw(getGame()->getRenderTarget());
 }
 
 

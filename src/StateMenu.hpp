@@ -16,11 +16,16 @@ public:
 
 private:
 	std::shared_ptr<JamTemplate::SmartShape> m_background;
+
 	std::shared_ptr<JamTemplate::SmartText>  m_text_Title;
 	std::shared_ptr<JamTemplate::SmartText>  m_text_1P;
 	std::shared_ptr<JamTemplate::SmartText>  m_text_2P;
 
+	std::shared_ptr<JamTemplate::SmartShape> m_overlay;
+
+
 	bool m_modeSelect{ false };
+	bool m_starting{ false };
 
 	void doInternalUpdate(float const /*elapsed*/) override;
 	void doCreate() override;
