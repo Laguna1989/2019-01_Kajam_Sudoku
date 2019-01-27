@@ -34,8 +34,11 @@ public:
 
 	void setPuzzleList(std::vector<std::string>&& list)
 	{
+		std::cout << "setpuzzlelist\n";
 		m_puzzleList = std::move(list);
 	}
+
+	int m_finished = 0;
 
 	inline void setWrongNumberCallBack(std::function<void(void)> cb) { m_wrongNumberCallback = cb; }
 	inline void setCorrectNumberCallBack(std::function<void(void)> cb) { m_correctNumberCallback = cb; }

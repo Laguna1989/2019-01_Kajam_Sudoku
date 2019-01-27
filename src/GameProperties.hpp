@@ -2,10 +2,18 @@
 #define GAME_GAMEPROPERTIES_HPP_INCLUDEGUARD
 
 #include <SFML/Graphics/Color.hpp>
+#include <string>
 class GP
 {
 public:
 	GP() = delete;
+
+	enum class DifficultyEnum
+	{
+		EASY,
+		MEDIUM,
+		HARD
+	};
 
 	static float CellPositionSpacing() { return 32.0f; }
 	static float CellPositionOffsetX() { return 10.0f; }
@@ -22,6 +30,20 @@ public:
 
 	static sf::Color PaletteFlashGreen() { return sf::Color{ 51,143,63 }; };
 	static sf::Color PaletteFlashRed() { return sf::Color{ 143,33,33 }; };
+
+	
+	static DifficultyEnum getDifficulty() { return difficulty; };
+	static void setDifficulty(DifficultyEnum d) { difficulty = d; };
+	static std::string Difficulty2String(DifficultyEnum d) 
+	{
+		if (d == DifficultyEnum::EASY) return "easy";
+		else if (d == DifficultyEnum::MEDIUM) return "medium";
+		else return "hard";
+	}
+
+private:
+	static DifficultyEnum difficulty;
+
 };
 
 #endif

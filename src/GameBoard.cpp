@@ -172,7 +172,7 @@ void GameBoard::placeWrongValue()
 void GameBoard::updateSelector(float elapsed)
 {
 	
-	//std::cout << m_selectorX << " " << m_selectorY << "\n";
+	
 	int nextX = m_selectorX;
 	int nextY = m_selectorY;
 	bool moved = false;
@@ -218,7 +218,6 @@ void GameBoard::updateSelector(float elapsed)
 
 	if (moved)
 	{
-		//std::cout << "move to " << nextX << " " << nextY << " from " << m_selectorX << " " << m_selectorY << std::endl;
 		moveCursorTo(nextX, nextY);
 	}
 
@@ -320,6 +319,7 @@ void GameBoard::getNextBoard()
 	{
 		v = JamTemplate::Random::getFloatGauss(GP::GameBoardInputTimerMax(), 0.105f);
 	}
+	m_finished++;
 }
 
  void GameBoard::doCreate()
@@ -329,6 +329,7 @@ void GameBoard::getNextBoard()
 
 
 	getNextBoard();
+	m_finished = 0;
 
 	m_text = std::make_shared<JamTemplate::SmartText>();
 	m_text->loadFont("assets/font.ttf");

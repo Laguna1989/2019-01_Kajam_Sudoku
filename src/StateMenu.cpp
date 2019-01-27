@@ -49,7 +49,17 @@ void StateMenu::doInternalUpdate(float const elapsed)
 				switchToRight();
 		}
 
+		if (ip::justPressed(sf::Keyboard::Up) || ip::justPressed(sf::Keyboard::W))
+		{
+			increaseDifficulty();
+		}
+		if (ip::justPressed(sf::Keyboard::Down) || ip::justPressed(sf::Keyboard::S))
+		{
+			decreaseDifficulty();
+		}
+
 		m_text_Title->update(elapsed);
+		m_text_Difficulty->update(elapsed);
 		m_text_1P->update(elapsed);
 		m_text_2P->update(elapsed);
 	}
@@ -57,6 +67,34 @@ void StateMenu::doInternalUpdate(float const elapsed)
 	{
 
 	}
+}
+
+void StateMenu::increaseDifficulty()
+{
+	if (GP::getDifficulty() == GP::DifficultyEnum::EASY)
+		GP::setDifficulty(GP::DifficultyEnum::MEDIUM);
+	else if (GP::getDifficulty() == GP::DifficultyEnum::MEDIUM)
+		GP::setDifficulty(GP::DifficultyEnum::HARD);
+	updateDifficultyString();
+	m_text_Difficulty->flash(0.35f, GP::PaletteFlashRed());
+}
+
+void StateMenu::decreaseDifficulty()
+{
+	if (GP::getDifficulty() == GP::DifficultyEnum::HARD)
+		GP::setDifficulty(GP::DifficultyEnum::MEDIUM);
+	else if (GP::getDifficulty() == GP::DifficultyEnum::MEDIUM)
+		GP::setDifficulty(GP::DifficultyEnum::EASY);
+	updateDifficultyString();
+	m_text_Difficulty->flash(0.35f, GP::PaletteFlashGreen());
+}
+
+void StateMenu::updateDifficultyString()
+{
+	m_text_Difficulty->setText(GP::Difficulty2String(GP::getDifficulty()));
+	m_text_Difficulty->update(0.0f);
+	
+	
 }
 
 void StateMenu::switchToLeft()
@@ -123,10 +161,20 @@ void StateMenu::doCreate()
 	m_text_2P->update(0.0f);
 	m_text_2P->SetTextAlign(JamTemplate::SmartText::TextAlign::CENTER);
 
+	
+	m_text_Difficulty = std::make_shared<JamTemplate::SmartText>();
+	m_text_Difficulty->loadFont("assets/font.ttf");
+	m_text_Difficulty->setCharacterSize(16U);
+	m_text_Difficulty->setText("Medium");
+	m_text_Difficulty->setPosition({ wC, 200 });
+	m_text_Difficulty->setColor(sf::Color{ 248, 249, 254 });
+	m_text_Difficulty->SetTextAlign(JamTemplate::SmartText::TextAlign::CENTER);
+	m_text_Difficulty->update(0.0f);
+
 	m_text_Credits = std::make_shared<JamTemplate::SmartText>();
 	m_text_Credits->loadFont("assets/font.ttf");
 	m_text_Credits->setCharacterSize(12U);
-	m_text_Credits->setText("Created by @Laguna_999 for #kajam\nJanuar 2019");
+	m_text_Credits->setText("Created by @Laguna_999 for #kajam\nJanuary 2019");
 	m_text_Credits->setPosition({ 10, 310 });
 	m_text_Credits->setColor(sf::Color{ 248, 249, 254 });
 	m_text_Credits->SetTextAlign(JamTemplate::SmartText::TextAlign::LEFT);
@@ -144,23 +192,39 @@ void StateMenu::doCreate()
 		tw->setSkipFrames();
 		add(tw);
 	}
+	using tp = JamTemplate::TweenPosition<JamTemplate::SmartText>;
+	using ta = JamTemplate::TweenAlpha<JamTemplate::SmartText>;
 	{
-		using tp = JamTemplate::TweenPosition<JamTemplate::SmartText>;
-		auto tw1 = tp::create(m_text_Title, 0.25f, (m_text_Title->getPosition() + sf::Vector2f{ 0,-80 }), m_text_Title->getPosition());
+		
+		/*auto tw1 = tp::create(m_text_Title, 0.25f, (m_text_Title->getPosition() + sf::Vector2f{ 0,-100 }), m_text_Title->getPosition());
 		tw1->setStartDelay(0.1f);
 		tw1->setSkipFrames();
-		add(tw1);
+		add(tw1);*/
 
+		auto ta1 = ta::create(m_text_Title, 0.25f, 0, 255);
+		ta1->setStartDelay(0.2f);
+		ta1->setSkipFrames();
+		add(ta1);
+	}
+	{
+		auto ta2 = ta::create(m_text_Difficulty, 0.25f, 0, 255);
+		ta2->setStartDelay(0.8f);
+		ta2->setSkipFrames();
+		add(ta2);
+	}
+	{
 		auto s2 = m_text_1P->getPosition() + sf::Vector2f{ -300,0 };
 		auto e2 = m_text_1P->getPosition();
-		auto tw2 = tp::create(m_text_1P, 0.35f,s2 , e2);
+
+		auto tw2 = tp::create(m_text_1P, 0.35f, s2, e2);
 		tw2->setStartDelay(0.3f);
 		tw2->setSkipFrames();
 		add(tw2);
-
-
+	}
+	{
 		auto s3 = m_text_2P->getPosition() + sf::Vector2f{ 300,0 };
 		auto e3 = m_text_2P->getPosition();
+		
 		auto tw3 = tp::create(m_text_2P, 0.35f, s3, e3);
 		tw3->setStartDelay(0.4f);
 		tw3->setSkipFrames();
@@ -189,6 +253,7 @@ void StateMenu::doInternalDraw() const
 	
 	m_text_1P->draw(getGame()->getRenderTarget());
 	m_text_2P->draw(getGame()->getRenderTarget());
+	m_text_Difficulty->draw(getGame()->getRenderTarget());
 	m_text_Credits->draw(getGame()->getRenderTarget());
 	m_overlay->draw(getGame()->getRenderTarget());
 	

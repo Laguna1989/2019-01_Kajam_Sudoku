@@ -23,6 +23,7 @@ private:
 	std::shared_ptr <GameBoard> m_boardP1;
 
 	virtual void doCreateInternal() override;
+	void doInternalUpdate(float const /*elapsed*/) override;
 };
 
 #endif

@@ -50,6 +50,7 @@ namespace JamTemplate
 		void setCharacterSize(unsigned int cs)
 		{
 			m_text->setCharacterSize(cs);
+			m_flashText->setCharacterSize(cs);
 		}
 
 		void setText(std::string text)
@@ -150,13 +151,15 @@ namespace JamTemplate
 		void doUpdate(float /*elapsed*/) override
 		{
 			m_text->setFont(*m_font);
+			m_flashText->setFont(*m_font);
 			sf::Vector2f alignOffset{};
 			if (m_textAlign != TextAlign::LEFT)
 				alignOffset.x = m_text->getGlobalBounds().width / (m_textAlign == TextAlign::CENTER ? 2.0f : 1.0f);
 			sf::Vector2f pos = m_position + getShakeOffset() + getOffset() + getCamOffset() - alignOffset;
 			sf::Vector2i posi { static_cast<int>(pos.x), static_cast<int>(pos.y) };
+			
 			m_text->setPosition(sf::Vector2f {static_cast<float>(posi.x), static_cast<float>(posi.y) });
-			m_flashText->setPosition(m_position + getShakeOffset() + getOffset() + getCamOffset());
+			m_flashText->setPosition(m_text->getPosition());
 			m_flashText->setScale(m_text->getScale());
 		}
 

@@ -8,6 +8,7 @@ set (PROJECTNAME "VsSudoku")
 set (GAMEFILES 
 	src/main.cpp
 	src/GameProperties.hpp
+	src/GameProperties.cpp
 	src/StateGame.hpp
 	src/StateGame.cpp
 	src/StateGameTwoPlayer.hpp

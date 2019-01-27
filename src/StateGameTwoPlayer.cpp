@@ -2,6 +2,8 @@
 #include "PuzzleStorage.hpp"
 #include "GameBoard.hpp"
 #include "Hud.hpp"
+#include "StateMenu.hpp"
+#include "JamTemplate/Game.hpp"
 
 void StateGameTwoPlayer::doCreateInternal()
 {
@@ -23,4 +25,12 @@ void StateGameTwoPlayer::doCreateInternal()
 	m_boardP2->setCorrectNumberCallBack([this]() {m_hud->AddScoreP2(); });
 	m_hud->AddScoreP1();
 	m_hud->AddScoreP2();
+}
+
+void StateGameTwoPlayer::doInternalUpdate(float const /*elapsed*/)
+{
+	if ( m_boardP1->m_finished >= 3 || m_boardP2->m_finished >= 3)
+	{
+		getGame()->switchState(std::make_shared<StateMenu>());
+	}
 }

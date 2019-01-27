@@ -15,14 +15,32 @@ class PuzzleStorage
 {
 public:
 	std::map<int, std::vector<std::string>> m_allPuzzles;
-
+	int minLevel{ 5 };
+	int maxLevel{ 50 };
 
 	PuzzleStorage()
 	{
 		size_t N = GP::GameBoardMaxParse();
-		std::cout << "loading puzzles";
+		//std::cout << "loading puzzles";
 		std::srand( static_cast<unsigned int>(std::time(0)) );	// seed it correctly
-		for (int i = 5; i != 50; ++i)
+		
+		if (GP::getDifficulty() == GP::DifficultyEnum::EASY)
+		{
+			minLevel = 5;
+			maxLevel = 20;
+		}
+		else if (GP::getDifficulty() == GP::DifficultyEnum::MEDIUM)
+		{
+			minLevel = 21;
+			maxLevel = 35;
+		}
+		else if (GP::getDifficulty() == GP::DifficultyEnum::HARD)
+		{
+			minLevel = 36;
+			maxLevel = 50;
+		}
+
+		for (int i = minLevel; i != maxLevel; ++i)
 		{
 			
 			std::string fn = "assets/p_" + std::to_string(i) + ".puz";
@@ -33,7 +51,7 @@ public:
 				throw std::exception("cannot load sudoku file.");
 			}
 			std::string str;
-			std::cout <<  fn <<"\n";
+			//std::cout <<  fn <<"\n";
 			size_t count = 0;
 			while (std::getline(in, str))
 			{
@@ -50,13 +68,13 @@ public:
 			}
 			std::random_shuffle(m_allPuzzles[i].begin(), m_allPuzzles[i].end());
 		}
-		std::cout << " done\n";
+		//std::cout << " done with N= "  << m_allPuzzles.size() << "\n";
 	}
 
 	std::vector<std::string> getPuzzleList(bool firstPlayer = true)
 	{
 		std::vector<std::string> retVal;
-		for (int i = 5; i != 50; ++i)
+		for (int i = minLevel; i != maxLevel; ++i)
 		{
 			auto size = m_allPuzzles[i].size();
 			
@@ -66,7 +84,7 @@ public:
 				retVal.push_back(m_allPuzzles[i][j + ofs]);
 			}
 		}
-		std::cout << "randomize puzzles\n";
+		//std::cout << "randomize puzzles\n";
 		std::random_shuffle(retVal.begin(), retVal.end());
 		return retVal;
 	}
