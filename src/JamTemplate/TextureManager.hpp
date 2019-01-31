@@ -109,7 +109,7 @@ namespace JamTemplate
 
 		static void addTexture(std::string name, sf::Texture& t)
 		{
-			m_textures[name].swap(t);
+			m_textures[name] = (t);
 		}
 
 	private:

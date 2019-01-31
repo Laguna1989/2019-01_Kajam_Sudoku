@@ -48,7 +48,7 @@ public:
 			if (in.fail())
 			{
 				std::cerr << "error, cannot load puzzle file:  " << fn << " . Please run SudokuCreatror!" << std::endl;
-				throw std::exception("cannot load sudoku file.");
+				//throw std::exception("cannot load sudoku file.");
 			}
 			std::string str;
 			//std::cout <<  fn <<"\n";
@@ -62,13 +62,16 @@ public:
 				Board p{};
 				Board s{};
 				Serializer::Deserialize(str, p, s);
-				m_allPuzzles[i].push_back(str);
-				count++;
+				if (p.getNumberOfSolutions(0, 0, 0) == 1)
+				{
+					m_allPuzzles[i].push_back(str);
+					count++;
+				}
 				if (count >= N) break;
 			}
 			std::random_shuffle(m_allPuzzles[i].begin(), m_allPuzzles[i].end());
 		}
-		//std::cout << " done with N= "  << m_allPuzzles.size() << "\n";
+		std::cout << " done with N= "  << m_allPuzzles.size() << "\n";
 	}
 
 	std::vector<std::string> getPuzzleList(bool firstPlayer = true)

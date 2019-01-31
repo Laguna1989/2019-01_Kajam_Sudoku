@@ -102,9 +102,9 @@ public:
 			cells.front()->setValue(0);
 			toTest.push_front(cells.front());
 
-			if (doFillCell(toTest, 0) == 2)
+			if (getNumberOfSolutions(0,0,0) >= 2)
 			{
-				//std::cout << "not unique anymore!\n";
+				std::cout << "not unique anymore!\n";
 				cells.front()->setValue(value);
 				toTest.pop_front();
 			}
@@ -138,8 +138,45 @@ public:
 		doFillCell(cells, 0);
 	}
 
+	bool legal(std::shared_ptr<Cell> cell, int val)
+	{
+		std::set<int> nv = getNeighbourValues(cell->getPosition());
+		bool b = std::find(nv.begin(), nv.end(), val) == nv.end();
+		
+		return b;
+	}
 
-	int doFillCell(std::deque<std::shared_ptr<Cell>> remainingCells, int value = 0)
+	int getNumberOfSolutions(int i, int j, int count = 0)
+	{
+		//std::cout << i << " " << j << std::endl;
+		if (i == 9)
+		{
+			i = 0;
+			if (++j == 9)
+			{
+				return count + 1;
+			}
+		}
+		std::shared_ptr<Cell> c = getCellAt({ i,j });
+		if (c->getValue() != 0)
+		{
+			return getNumberOfSolutions(i + 1, j, count);
+		}
+		for (int val = 1; val <= 9 && count < 2; ++val) 
+		{
+			if (legal(c, val)) 
+			{
+				c->setValue(val);
+				// add additional solutions
+				count = getNumberOfSolutions(i + 1, j, count);
+			}
+		}
+		c->setValue(0);
+		return count;
+	}
+
+
+	int doFillCell(std::deque<std::shared_ptr<Cell>> remainingCells, int count = 0)
 	{
 		static std::set<int> const allValues = { 1,2,3,4,5,6,7,8,9 };
 
@@ -152,7 +189,6 @@ public:
 			if (cell->getValue() == 0)
 				break;
 		}
-		
 
 		std::set<int> neighborValues = getNeighbourValues(cell->getPosition());
 		std::vector<int> options;
@@ -170,19 +206,18 @@ public:
 			// all cells have been filled
 			if (remainingCells.empty())
 			{
-				value += 1;
-				return value;
+				return count +1;
 			}
 
 			// go down recursively
-			value = doFillCell(remainingCells, value);
-			//std::cout << remainingCells.size() << " " << value << "\n";
-			if (value != 0)
+			count = doFillCell(remainingCells, count);
+			//std::cout << remainingCells.size() << " " << count << "\n";
+			if (count != 0)
 			{
-				if (value >= 2)
-					value = 2;
+				if (count >= 2)
+					count = 2;
 
-				return value;
+				return count;
 			}
 		}
 
@@ -190,7 +225,7 @@ public:
 		// reset value and push it back to remaining cells
 		cell->setValue(0);
 		remainingCells.push_front(cell);
-		return value;
+		return count;
 	}
 
 	std::shared_ptr<Cell> getCellAt(Coord const& coord) const

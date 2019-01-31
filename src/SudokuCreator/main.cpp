@@ -23,7 +23,8 @@ int main()
 		Board b{};
 		b.createPuzzle(dist(dre));
 		auto of = b.getOpenFields();
-		std::cout << of << std::endl;
+		auto solutions = b.getNumberOfSolutions(0, 0, 0);
+		std::cout << of << " " << solutions << std::endl;
 		Board s{};
 		b.getSolution(s);
 		saved[of] += Serializer::Serialize(b, s) + "\n";

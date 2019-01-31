@@ -1,3 +1,5 @@
+#ifndef SERIALIZER_HPP_GUARD
+#define SERIALIZER_HPP_GUARD
 #include "Board.hpp"
 #include "../JamTemplate/SplitString.hpp"
 #include <string>
@@ -53,3 +55,5 @@ public:
 		}
 	}
 };
+
+#endif
