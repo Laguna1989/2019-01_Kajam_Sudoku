@@ -87,7 +87,7 @@ public:
 	void createPuzzle(size_t upTo = 10)
 	{
 		fillBoard();
-		random_shuffle(m_cells.begin(), m_cells.end());
+		std::random_shuffle(m_cells.begin(), m_cells.end());
 		std::deque<std::shared_ptr<Cell>> cells;
 		for (size_t m = 0; m != upTo; ++m)
 		{
@@ -196,7 +196,7 @@ public:
 			neighborValues.begin(), neighborValues.end(),
 			std::inserter(options, options.begin())
 		);
-		random_shuffle(options.begin(), options.end());
+		std::random_shuffle(options.begin(), options.end());
 
 		for (auto op : options)
 		{
